@@ -9,7 +9,8 @@ import { Button } from "antd";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
+
+  
   const [isuser,setisUser]=useState<string|null>(()=>{
     return localStorage.getItem('currentUser');
   })
@@ -30,11 +31,7 @@ const Header = () => {
     }
   };
 
-//   const handleProductSelect = (event, value) => {
-//     if (value && value._id) {
-//       navigate(`/product/page/${value._id}`);
-//     }
-//   };
+
 
   return (
     <>
