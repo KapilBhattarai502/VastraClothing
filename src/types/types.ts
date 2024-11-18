@@ -1,0 +1,47 @@
+export interface LoginType{
+    email:string,
+    password:string,
+}
+
+export interface LoginResUser{
+    name:string,
+    role:string,
+}
+
+
+
+export interface JWT{
+    token:string
+}
+
+
+export interface ResUser extends JWT {
+    user:LoginResUser
+
+}
+
+export interface Size {
+    name: string;
+    quantity: number;
+  }
+  
+ export  interface FormValues {
+    brand: string;
+    title: string;
+    imageUrl: string;
+    color: string;
+    price: number;
+    discountedPercent: number;
+    discountedPrice: number;
+    quantity: number;
+    description: string;
+    sizes: Size[];
+  }
+
+  export interface NEWUSER{
+    firstName:string,
+    lastName:string,
+    role:string,
+    email:string,
+    password:string
+  }
