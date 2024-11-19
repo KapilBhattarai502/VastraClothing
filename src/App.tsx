@@ -13,6 +13,7 @@ import MenFashion from "./Pages/MenFashion";
 import CustomerProtectedRoute from "./CustomerProtectedRoute";
 import ProductDetails from "./AdminPages/ProductDetails";
 import CustomerProductDetails from "./Pages/CustomerProductDetails";
+import Cart from "./Pages/Cart";
 
 const App = () => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
             <Route index element={<Navigate to="men" replace />} />
             <Route path="men" element={<MenFashion />} />
             <Route path="productpage/:id" element={<CustomerProductDetails/>}/>
+            <Route path="cart" element={<Cart/>}/>
           </Route>
           <Route path="/register" element={<Registerpage />} />
         </Routes>
