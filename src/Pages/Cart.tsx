@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
 import { useGetUserCart } from '../hooks/useGetUserCart'
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useDeleteCartItem } from '../hooks/useDeleteCartItem';
 
 const Cart = () => {
 
    const {isLoading,data} =useGetUserCart()
+   const {mutate:deleteCartItem}=useDeleteCartItem()
+   console.log(data)
    
    useEffect(()=>{
     window.scrollTo(0,0);
@@ -23,7 +26,7 @@ const Cart = () => {
       <div className="flex justify-between max-w-[1200px] mx-auto mt-20 gap-12 ">
         <div className="flex-grow">
           {data?.data.cartItems.length > 0 ? (
-            data?.data.cartItems.map((item) => (
+            data?.data.cartItems.map((item:any) => (
               <div key={item._id} className=" h-[200px] shadow-lg  px-4 mb-6">
                 <div className="flex gap-4 justify-between">
                   <div className="h-[140px] w-[110px]">
@@ -73,12 +76,9 @@ const Cart = () => {
                   <div></div>
                   <div>
                     <DeleteIcon
-                    //   onClick={() => {
-                    //     CartFunction({
-                    //       type: "DELETECARTITEM",
-                    //       payload: { ...item },
-                    //     });
-                    //   }}
+                      onClick={() => {
+                       deleteCartItem(item._id)
+                      }}
                       className="cursor-pointer"
                     />
                   </div>
