@@ -11,6 +11,7 @@ import Registerpage from "./Pages/Registerpage";
 import CustomerLayout from "./Layouts/CustomerLayout";
 import MenFashion from "./Pages/MenFashion";
 import CustomerProtectedRoute from "./CustomerProtectedRoute";
+import ProductDetails from "./Pages/ProductDetails";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="viewproducts" element={<Viewproductpage />} />
             <Route path="addproduct" element={<Createproduct />} />
+            <Route path="productpage/:id" element={<ProductDetails/>}/>
             <Route path="logout" element={<Logout />} />
           </Route>
           <Route

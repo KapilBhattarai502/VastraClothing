@@ -1,14 +1,16 @@
+import { useNavigate } from "react-router-dom";
 
 
 
 
 const FashionCard = ({product}:any) => {
+  const navigate=useNavigate()
   
 
   const {imageUrl,price,_id,discountedPrice,title} = product;
  
   return (
-    <div className='p-2 hover:shadow-lg cursor-pointer group'>
+    <div className='p-2 hover:shadow-lg cursor-pointer group' onClick={()=>{navigate(`/admin/productpage/${_id}`)}}>
       <div className='h-[600px]'>
         <img src={imageUrl} alt='' className='object-cover w-full h-full transition-transform duration-500 ease-in-out transform group-hover:scale-90'/>
       </div>
