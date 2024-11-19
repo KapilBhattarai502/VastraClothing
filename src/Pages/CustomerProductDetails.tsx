@@ -2,17 +2,24 @@ import { useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { useGetProductById } from "../hooks/useGetProductById";
+import { useAddCart } from "../hooks/useAddCart";
 
 const CustomerProductDetails = () => {
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState("M");
   const { mutate, data, isLoading } = useGetProductById();
   const { id } = useParams();
+  const {mutate:addToCart}=useAddCart()
   useEffect(() => {
     window.scrollTo(0, 0);
     mutate(id);
   }, [id]);
 
   console.log(size);
+
+  const handleAddToCart=()=>{
+    addToCart({productId:id,size})
+
+  }
 
   return (
     <div className="mt-20 grid grid-cols-2 p-4 gap-28">
@@ -40,7 +47,7 @@ const CustomerProductDetails = () => {
         </p>
         <p className="font-thin line-through">Rs {data?.data.price}</p>
 
-        <button className="font-thin mt-10 border border-slate-500 py-2 px-20 hover:bg-slate-950 hover:text-white">
+        <button className="font-thin mt-10 border border-slate-500 py-2 px-20 hover:bg-slate-950 hover:text-white" onClick={handleAddToCart}>
           ADD TO CART
         </button>
 

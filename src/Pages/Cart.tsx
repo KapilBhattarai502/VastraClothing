@@ -6,7 +6,9 @@ const Cart = () => {
 
    const {isLoading,data} =useGetUserCart()
    
-   useEffect(()=>{},[])
+   useEffect(()=>{
+    window.scrollTo(0,0);
+   },[])
   return (
     <div className="mt-20">
       <div className="h-[400px] bg-slate-600 flex  items-center justify-center ">
