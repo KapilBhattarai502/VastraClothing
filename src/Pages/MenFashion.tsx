@@ -58,6 +58,7 @@ const MenFashion = () => {
   const filterColors = ["blue", "green","beige","black"];
 
   useEffect(() => {
+    
     const colors = colorValue || [];
     const [minPrice, maxPrice] =
       priceValue === null ? [0, 10000] : priceValue.split("-").map(Number);
@@ -74,7 +75,7 @@ const MenFashion = () => {
         dispatch({ type: "error" });
       }
     })();
-  }, [colorValue, priceValue]);
+  }, [colorValue, priceValue,window]);
 
   const handleChange = (event:any) => {
     setSortBy(event.target.value);
