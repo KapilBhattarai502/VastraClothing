@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import  { useEffect} from "react";
 import { useParams } from "react-router-dom";
 import { useGetProductById } from "../hooks/useGetProductById";
+
+
 
 const ProductDetails = () => {
   const { mutate, data, isLoading } = useGetProductById();
@@ -9,6 +11,8 @@ const ProductDetails = () => {
     mutate(id);
   }, [id]);
   console.log(data);
+
+ 
   return (
     <div className=" grid grid-cols-2 p-4 gap-28">
       {/* image */}
