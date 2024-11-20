@@ -1,13 +1,12 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import api from "../Config/api";
 import FashionCard from "../components/Fashioncard";
 import CircleProgress from "../components/CircularProgress";
 import { useSearchParams } from "react-router-dom";
-import FilterListIcon from '@mui/icons-material/FilterList';
+import FilterListIcon from "@mui/icons-material/FilterList";
 import {
   Disclosure,
   DisclosureButton,
@@ -15,73 +14,31 @@ import {
 } from "@headlessui/react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-
-const initialState = {
-  data: [],
-  loading: null,
-  success: null,
-  error: null,
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "loading":
-      return { ...state, loading: true };
-
-    case "success":
-      return {
-        ...state,
-        loading: false,
-        error: false,
-        data: action.payload,
-      };
-
-    case "error":
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        data: [],
-        success: false,
-      };
-  }
-}
+import { Pagination } from "antd";
+import { useGetMenFashion } from "../hooks/useGetMenFashion";
 
 const MenFashion = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  // State for page number
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Call useGetMenFashion with the current page number
+  const { isLoading, data } = useGetMenFashion({ pageNumber: currentPage });
+
   const [sortBy, setSortBy] = React.useState("bestMatch");
   const [searchParams, setSearchParams] = useSearchParams();
   const colorValue = searchParams.get("colors");
-
   const priceValue = searchParams.get("Price");
 
-  const filterColors = ["blue", "green","beige","black"];
+  const filterColors = ["blue", "green", "beige", "black"];
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[currentPage])
 
-  useEffect(() => {
-    
-    const colors = colorValue || [];
-    const [minPrice, maxPrice] =
-      priceValue === null ? [0, 10000] : priceValue.split("-").map(Number);
- 
-    (async () => {
-      dispatch({ type: "loading" });
-
-      try {
-        const { data } = await api.get(
-          `/api/products?colors=${colors}&minPrice=${minPrice}&maxPrice=${maxPrice}`
-        );
-        dispatch({ type: "success", payload: data.content });
-      } catch (error) {
-        dispatch({ type: "error" });
-      }
-    })();
-  }, [colorValue, priceValue,window]);
-
-  const handleChange = (event:any) => {
+  const handleChange = (event: any) => {
     setSortBy(event.target.value);
   };
 
-  const handleFilterChange = (e:any) => {
+  const handleFilterChange = (e: any) => {
     if (e.target.checked) {
       searchParams.set("colors", e.target.value);
     } else {
@@ -91,7 +48,6 @@ const MenFashion = () => {
   };
 
   const handleFilterPriceChange = (e) => {
- 
     if (e.target.checked) {
       searchParams.set("Price", e.target.value);
     } else {
@@ -100,7 +56,7 @@ const MenFashion = () => {
     setSearchParams(searchParams);
   };
 
-  const getSortedData = (data:any) => {
+  const getSortedData = (data: any) => {
     if (sortBy === "asc") {
       return [...data].sort((a, b) => a.price - b.price); // Ascending
     } else if (sortBy === "desc") {
@@ -109,8 +65,13 @@ const MenFashion = () => {
     return data; // No sorting for "Best Match"
   };
 
-  const sortedData = getSortedData(state.data);
+  const sortedData = getSortedData(data?.content);
 
+  // Handle page change for Pagination component
+  const handlePageChange = (page: number) => {
+    console.log(page)
+    setCurrentPage(page);
+  };
 
   return (
     <div className="mt-18">
@@ -124,13 +85,13 @@ const MenFashion = () => {
         <div className=" grid grid-cols-4 gap-4">
           {/* Filter Component */}
           <div>
-          <div className="flex justify-between items-center">
-          <h4 className="mb-2">Filter by</h4>
-          <FilterListIcon/>
-          </div>
-            
+            <div className="flex justify-between items-center">
+              <h4 className="mb-2">Filter by</h4>
+              <FilterListIcon />
+            </div>
 
             <hr />
+            {/* Color Filter */}
             <Disclosure as="div" className="border-b border-gray-200 py-6">
               <h3 className="-my-3 flow-root">
                 <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
@@ -140,7 +101,6 @@ const MenFashion = () => {
                       aria-hidden="true"
                       className="h-5 w-5 group-data-[open]:hidden"
                     />
-
                     <RemoveIcon
                       aria-hidden="true"
                       className="h-5 w-5 [.group:not([data-open])_&]:hidden"
@@ -150,25 +110,24 @@ const MenFashion = () => {
               </h3>
               <DisclosurePanel className="pt-6">
                 <div className="space-y-4">
-                  {filterColors.map((color,index) => {
-                    return (
-                     <div key={index}>
-                        <input
-                          id={color}
-                          type="checkbox"
-                          className="mr-2"
-                          value={color}
-                          onChange={handleFilterChange}
-                        />
-                        <label htmlFor={color}>{color}</label>
-                        <br />
-                        </div>
-                    );
-                  })}
+                  {filterColors.map((color, index) => (
+                    <div key={index}>
+                      <input
+                        id={color}
+                        type="checkbox"
+                        className="mr-2"
+                        value={color}
+                        onChange={handleFilterChange}
+                      />
+                      <label htmlFor={color}>{color}</label>
+                      <br />
+                    </div>
+                  ))}
                 </div>
               </DisclosurePanel>
             </Disclosure>
 
+            {/* Price Filter */}
             <Disclosure as="div" className="border-b border-gray-200 py-6">
               <h3 className="-my-3 flow-root">
                 <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
@@ -178,7 +137,6 @@ const MenFashion = () => {
                       aria-hidden="true"
                       className="h-5 w-5 group-data-[open]:hidden"
                     />
-
                     <RemoveIcon
                       aria-hidden="true"
                       className="h-5 w-5 [.group:not([data-open])_&]:hidden"
@@ -188,54 +146,22 @@ const MenFashion = () => {
               </h3>
               <DisclosurePanel className="pt-6">
                 <div className="space-y-4">
-                  <div>
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      value="159-399"
-                      onChange={handleFilterPriceChange}
-                    />
-                    <label>Rs 159 To Rs399</label>
-                    <br />
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      value="399-999"
-                      onChange={handleFilterPriceChange}
-                    />
-                    <label>Rs 399 To Rs999</label>
-                    <br />
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      value="999-2999"
-                      onChange={handleFilterPriceChange}
-                    />
-                    <label>Rs 999 To Rs2999</label>
-
-                    <br />
-                    <input
-                      type="checkbox"
-                      className="mr-2"
-                      value="3999-4999"
-                      onChange={handleFilterPriceChange}
-                    />
-                    <label>Rs Rs3999 To Rs4999</label>
-
-                    <br />
-                  </div>
+                  {/* Price Options */}
+                  {/* Add checkboxes here */}
                 </div>
               </DisclosurePanel>
             </Disclosure>
           </div>
+
+          {/* Products and Pagination */}
           <div className="col-span-3">
             <div className="flex flex-row-reverse">
               <div className="w-[12rem]">
                 <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Sort by</InputLabel>
+                  <InputLabel id="sort-by-label">Sort by</InputLabel>
                   <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
+                    labelId="sort-by-label"
+                    id="sort-by-select"
                     value={sortBy}
                     label="SortBy"
                     onChange={handleChange}
@@ -248,8 +174,8 @@ const MenFashion = () => {
               </div>
             </div>
             <div className="grid grid-cols-3 mt-2 gap-1">
-              {!state.loading ? (
-                sortedData.map((product) => (
+              {!isLoading ? (
+                sortedData.map((product: any) => (
                   <FashionCard key={product._id} product={product} />
                 ))
               ) : (
@@ -257,7 +183,14 @@ const MenFashion = () => {
                   <CircleProgress />
                 </div>
               )}
-              {!state.data.length>0 && <p className="ml-4">Currently no clothes at this range</p>}
+            </div>
+            <div className="mt-20">
+              <Pagination
+                align="center"
+                current={currentPage}
+                total={data?.totalPages * 10}
+                onChange={handlePageChange}
+              />
             </div>
           </div>
         </div>
@@ -267,3 +200,23 @@ const MenFashion = () => {
 };
 
 export default MenFashion;
+
+
+// useEffect(() => {
+//   const colors = colorValue || [];
+//   const [minPrice, maxPrice] =
+//     priceValue === null ? [0, 10000] : priceValue.split("-").map(Number);
+
+//   (async () => {
+//     dispatch({ type: "loading" });
+
+//     try {
+//       const { data } = await api.get(
+//         `/api/products?colors=${colors}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+//       );
+//       dispatch({ type: "success", payload: data.content });
+//     } catch (error) {
+//       dispatch({ type: "error" });
+//     }
+//   })();
+// }, [colorValue, priceValue, window]);

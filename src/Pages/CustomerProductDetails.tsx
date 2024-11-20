@@ -64,9 +64,6 @@ const CustomerProductDetails = () => {
               }}
               required
             >
-              <option className=" opacity-60 text-sm font-light">
-                Select Size
-              </option>
               <option value="S">Small</option>
               <option value="M">Medium</option>
               <option value="L">Large</option>
