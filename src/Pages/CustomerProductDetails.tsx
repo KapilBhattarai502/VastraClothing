@@ -64,8 +64,9 @@ const CustomerProductDetails = () => {
               }}
               required
             >
-              <option value="S">Small</option>
+              
               <option value="M">Medium</option>
+              <option value="S">Small</option>
               <option value="L">Large</option>
             </select>
 
