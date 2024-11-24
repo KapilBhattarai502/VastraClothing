@@ -12,6 +12,14 @@ const Cart = () => {
    useEffect(()=>{
     window.scrollTo(0,0);
    },[])
+
+  const updateCartItem=(id:string)=>{
+
+    console.log(id);
+
+  }
+
+  console.log(data?.data.cartItems);
   return (
     <div className="mt-20">
       <div className="h-[400px] bg-slate-600 flex  items-center justify-center ">
@@ -49,12 +57,7 @@ const Cart = () => {
                     </div>
                     <div className="flex gap-2 border border-slate-500 px-2">
                       <button
-                        // onClick={() => {
-                        //   CartFunction({
-                        //     type: "REMOVEFROMCART",
-                        //     payload: { ...item },
-                        //   });
-                        // }}
+                        
                         disabled={item.quantity === 1}
                       >
                         -
@@ -62,12 +65,7 @@ const Cart = () => {
                       <p className="mx-4">{item.quantity}</p>
 
                       <button
-                        // onClick={() => {
-                        //   CartFunction({
-                        //     type: "ADDTOCART",
-                        //     payload: { ...item, selectedQuantity: 1 },
-                        //   });
-                        // }}
+                       onClick={()=>{updateCartItem(item._id)}}
                       >
                         +
                       </button>
