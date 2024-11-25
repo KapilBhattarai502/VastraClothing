@@ -16,6 +16,7 @@ export const usePostLogin=()=>{
         
     {
         onSuccess:({data}:any)=>{
+            console.log(data)
 
             localStorage.setItem('token',data.token)
             localStorage.setItem('role',data.user.role)

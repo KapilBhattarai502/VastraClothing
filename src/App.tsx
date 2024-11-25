@@ -14,6 +14,7 @@ import CustomerProtectedRoute from "./CustomerProtectedRoute";
 import ProductDetails from "./AdminPages/ProductDetails";
 import CustomerProductDetails from "./Pages/CustomerProductDetails";
 import Cart from "./Pages/Cart";
+import AddressPage from "./Pages/AddressPage";
 
 const App = () => {
   return (
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="men" element={<MenFashion />} />
             <Route path="productpage/:id" element={<CustomerProductDetails/>}/>
             <Route path="cart" element={<Cart/>}/>
+            <Route path="address" element={<AddressPage/>}/>
           </Route>
           <Route path="/register" element={<Registerpage />} />
         </Routes>
