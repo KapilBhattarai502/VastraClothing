@@ -15,15 +15,12 @@ const Loginpage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (
-      localStorage.getItem("token") &&
-      localStorage.getItem("role").toLowerCase() === "admin"
-    ) {
-      navigate("/admin/dashboard");
-    } else if (localStorage.getItem("token")) {
-      navigate("/");
-    }
-  }, []);
+
+
+  if(localStorage.getItem('token')){
+    localStorage.getItem('role')==='admin'? navigate("/admin/dashboard"):navigate("/");
+  
+  }},[])
 
   return (
     <Formik

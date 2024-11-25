@@ -2,17 +2,22 @@ import React, { useEffect } from 'react'
 import { useGetUserCart } from '../hooks/useGetUserCart'
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDeleteCartItem } from '../hooks/useDeleteCartItem';
+import { useUpdateCartItem } from '../hooks/useUpdateCartItem';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
+  const navigate=useNavigate()
 
    const {isLoading,data} =useGetUserCart()
    const {mutate:deleteCartItem}=useDeleteCartItem()
+   const {mutate:updateCart,isLoading:updatingCartItem}=useUpdateCartItem()
    console.log(data)
    
    useEffect(()=>{
     window.scrollTo(0,0);
    },[])
 
+<<<<<<< HEAD
   const updateCartItem=(id:string)=>{
 
     console.log(id);
@@ -20,6 +25,21 @@ const Cart = () => {
   }
 
   console.log(data?.data.cartItems);
+=======
+   const updateCartItem=(cartItemId:string,currentquantity:number)=>{
+    updateCart({cartItemId,quantity:currentquantity+1})
+  
+
+   }
+   const decreaseCartItem=(cartItemId:string,currentquantity:number)=>{
+    updateCart({cartItemId,quantity:currentquantity-1})
+  
+
+   }
+   const handleCheckout=()=>{
+    navigate("/clothes/address")
+   }
+>>>>>>> updateCartItem
   return (
     <div className="mt-20">
       <div className="h-[400px] bg-slate-600 flex  items-center justify-center ">
@@ -49,7 +69,7 @@ const Cart = () => {
                         {item.title}
                       </h1>
                       <h3 className="line-through font-thin">
-                        Rs {item.price}{" "}
+                        Rs {item.price}
                       </h3>
                       <h2>Rs {item.discountedPrice}</h2>
                       <p className=" font-light">color:{item.color}</p>
@@ -57,7 +77,14 @@ const Cart = () => {
                     </div>
                     <div className="flex gap-2 border border-slate-500 px-2">
                       <button
+<<<<<<< HEAD
                         
+=======
+                        onClick={() => {
+                          decreaseCartItem(item._id,item.quantity)
+        
+                        }}
+>>>>>>> updateCartItem
                         disabled={item.quantity === 1}
                       >
                         -
@@ -65,7 +92,13 @@ const Cart = () => {
                       <p className="mx-4">{item.quantity}</p>
 
                       <button
+<<<<<<< HEAD
                        onClick={()=>{updateCartItem(item._id)}}
+=======
+                      
+                      onClick={()=>{updateCartItem(item._id,item.quantity)}}
+                      disabled={updatingCartItem}
+>>>>>>> updateCartItem
                       >
                         +
                       </button>
@@ -103,7 +136,7 @@ const Cart = () => {
           </div>
           <div className="flex justify-between items-center my-4">
             <p>Discounted Price</p>
-            <p>Rs {data?.data.totalDiscountedPrice}</p>
+            <p>Rs {data?.data.discounts}</p>
           </div>
           <div className="flex justify-between items-center my-4">
             <p>Delivery Charge</p>
@@ -112,10 +145,10 @@ const Cart = () => {
           <hr />
           <div className="flex justify-between items-center my-4">
             <p>Total</p>
-            <p>Rs {data?.data.discounts}</p>
+            <p>Rs {data?.data.totalDiscountedPrice}</p>
           </div>
           <hr />
-          <button className="w-full text-center bg-slate-900 text-white py-2 mt-8">
+          <button className="w-full text-center bg-slate-900 text-white py-2 mt-8" onClick={handleCheckout}>
             Checkout
           </button>
         </div>

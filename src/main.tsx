@@ -6,7 +6,14 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { store } from './store/Store.ts'
 import { Provider } from 'react-redux'
 
-const queryClient=new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
