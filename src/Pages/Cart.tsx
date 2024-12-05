@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const Cart = () => {
   const navigate=useNavigate()
 
-   const {isLoading,data} =useGetUserCart()
+   const {data} =useGetUserCart()
    const {mutate:deleteCartItem}=useDeleteCartItem()
    const {mutate:updateCart,isLoading:updatingCartItem}=useUpdateCartItem()
    console.log(data)
@@ -17,15 +17,6 @@ const Cart = () => {
     window.scrollTo(0,0);
    },[])
 
-<<<<<<< HEAD
-  const updateCartItem=(id:string)=>{
-
-    console.log(id);
-
-  }
-
-  console.log(data?.data.cartItems);
-=======
    const updateCartItem=(cartItemId:string,currentquantity:number)=>{
     updateCart({cartItemId,quantity:currentquantity+1})
   
@@ -39,7 +30,6 @@ const Cart = () => {
    const handleCheckout=()=>{
     navigate("/clothes/address")
    }
->>>>>>> updateCartItem
   return (
     <div className="mt-20">
       <div className="h-[400px] bg-slate-600 flex  items-center justify-center ">
@@ -77,14 +67,10 @@ const Cart = () => {
                     </div>
                     <div className="flex gap-2 border border-slate-500 px-2">
                       <button
-<<<<<<< HEAD
-                        
-=======
                         onClick={() => {
                           decreaseCartItem(item._id,item.quantity)
         
                         }}
->>>>>>> updateCartItem
                         disabled={item.quantity === 1}
                       >
                         -
@@ -92,13 +78,9 @@ const Cart = () => {
                       <p className="mx-4">{item.quantity}</p>
 
                       <button
-<<<<<<< HEAD
-                       onClick={()=>{updateCartItem(item._id)}}
-=======
                       
                       onClick={()=>{updateCartItem(item._id,item.quantity)}}
                       disabled={updatingCartItem}
->>>>>>> updateCartItem
                       >
                         +
                       </button>

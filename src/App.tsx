@@ -15,6 +15,8 @@ import ProductDetails from "./AdminPages/ProductDetails";
 import CustomerProductDetails from "./Pages/CustomerProductDetails";
 import Cart from "./Pages/Cart";
 import AddressPage from "./Pages/AddressPage";
+import OrderPage from "./Pages/OrderPage";
+import EsewaErrorPage from "./components/e-sewaIntegration/pages/EsewaErrorPage";
 
 const App = () => {
   return (
@@ -51,6 +53,8 @@ const App = () => {
             <Route path="productpage/:id" element={<CustomerProductDetails/>}/>
             <Route path="cart" element={<Cart/>}/>
             <Route path="address" element={<AddressPage/>}/>
+            <Route path="order" element={<OrderPage/>}/>
+            <Route path='esewa-error' element={<EsewaErrorPage/>}/>
           </Route>
           <Route path="/register" element={<Registerpage />} />
         </Routes>
