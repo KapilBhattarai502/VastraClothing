@@ -31,7 +31,7 @@ const CustomerProductDetails = () => {
   return (
     <Formik initialValues={InitialproductDetailsSize} validationSchema={productDetailsvalidationSchema} 
      onSubmit={(values, { setSubmitting }) => {
-      addToCart({ productId: id, ...values });
+      addToCart({ productId: id, ...values,quantity:1 });
         setSubmitting(false);
    
     }}

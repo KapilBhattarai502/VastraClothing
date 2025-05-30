@@ -69,7 +69,6 @@ const MenFashion = () => {
 
   // Handle page change for Pagination component
   const handlePageChange = (page: number) => {
-    console.log(page)
     setCurrentPage(page);
   };
 
@@ -110,7 +109,7 @@ const MenFashion = () => {
               </h3>
               <DisclosurePanel className="pt-6">
                 <div className="space-y-4">
-                  {filterColors.map((color, index) => (
+                  {filterColors?.map((color, index) => (
                     <div key={index}>
                       <input
                         id={color}
@@ -175,7 +174,7 @@ const MenFashion = () => {
             </div>
             <div className="grid grid-cols-3 mt-2 gap-1">
               {!isLoading ? (
-                sortedData.map((product: any) => (
+                sortedData?.map((product: any) => (
                   <FashionCard key={product._id} product={product} />
                 ))
               ) : (
@@ -202,21 +201,3 @@ const MenFashion = () => {
 export default MenFashion;
 
 
-// useEffect(() => {
-//   const colors = colorValue || [];
-//   const [minPrice, maxPrice] =
-//     priceValue === null ? [0, 10000] : priceValue.split("-").map(Number);
-
-//   (async () => {
-//     dispatch({ type: "loading" });
-
-//     try {
-//       const { data } = await api.get(
-//         `/api/products?colors=${colors}&minPrice=${minPrice}&maxPrice=${maxPrice}`
-//       );
-//       dispatch({ type: "success", payload: data.content });
-//     } catch (error) {
-//       dispatch({ type: "error" });
-//     }
-//   })();
-// }, [colorValue, priceValue, window]);

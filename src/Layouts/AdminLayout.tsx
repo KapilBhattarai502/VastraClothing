@@ -4,10 +4,13 @@ import {
   PieChartOutlined,
   
 } from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import type { MenuProps} from "antd";
+
+import {Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { PlusOneOutlined } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { Input } from 'antd';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -30,27 +33,22 @@ function getItem(
 const items: MenuItem[] = [
   getItem("Admin", "dashboard", <PieChartOutlined />),
   getItem("View Products", "viewproducts", <DesktopOutlined />),
-//   getItem("User", "sub1", <UserOutlined />, [
-//     getItem("Tom", "3"),
-//     getItem("Bill", "4"),
-//     getItem("Alex", "5"),
-//   ]),
-//   getItem("Team", "sub2", <TeamOutlined />, [
-//     getItem("Team 1", "6"),
-//     getItem("Team 2", "8"),
-//   ]),
-  
   getItem("AddProduct", "addproduct", <PlusOneOutlined />),
+  getItem("Orders", "orders", <PlusOneOutlined />),
   getItem("Logout", "logout", <PieChartOutlined />),
+
  
 ];
 
 const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
+  const { Search } = Input;
+  const {isSearchRequired}=useSelector((state:any)=>state.searchRequired)
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
 
   const onMenuClick: MenuProps["onClick"] = (e) => {
     navigate(`/admin/${e.key}`); // Navigates to /admin/<key>
@@ -80,7 +78,15 @@ const AdminLayout: React.FC = () => {
           transition: "margin-left 0.2s",
         }}
       >
-        <Header style={{ padding: 0, background: colorBgContainer }} />
+        <Header style={{
+            margin: "16px",
+            padding: "12px",
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }} >
+            {isSearchRequired ?  <Search placeholder="Search here..." enterButton="Search" size="large"  /> : null}
+      
+          </Header>
         <Content
           style={{
             margin: "16px",
@@ -89,10 +95,7 @@ const AdminLayout: React.FC = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <Breadcrumb
-            style={{ marginBottom: "16px" }}
-            items={[{ title: "User" }, { title: "Bill" }]}
-          />
+         
 
           <Outlet />
         </Content>

@@ -36,6 +36,9 @@ export interface Size {
     quantity: number;
     description: string;
     sizes: Size[];
+    pujaName:String;
+    puja_quantity:Number,
+    unit:String
   }
 
   export interface NEWUSER{

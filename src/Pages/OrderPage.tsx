@@ -5,7 +5,7 @@ const OrderPage = () => {
 
   return (
     <div className='mt-20'>
-        <PaymentStepper activeStep={1}/>
+      Order page
     </div>
   )
 }

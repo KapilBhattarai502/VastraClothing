@@ -2,18 +2,18 @@ import { message } from "antd"
 import axios from "axios"
 import { useQuery } from "react-query"
 
-const QUERYKEY = 'getProducts'
+const QUERYKEY = 'getBrantabandhaItems'
 
 
-const getProducts:any=async(pageNumber:any)=>{
-    const {data}= await axios.get(`http://localhost:6464/api/products?pageNumber=${pageNumber}`)
-    return data
+const getBratabandhaProducts=async()=>{
+    const response= await axios.get("http://localhost:6464/api/bratabandha/items")
+    return response?.data
 }
 
 
-export const useGetProduct=(pageNumber:any)=>{
+export const useGetBratabandhaItems=()=>{
 
-    return useQuery([QUERYKEY,pageNumber],()=>getProducts(pageNumber),
+    return useQuery(QUERYKEY,getBratabandhaProducts,
         { 
             onSuccess:()=>{
                 console.log('Successfully fetched data');

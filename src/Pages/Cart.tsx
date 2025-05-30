@@ -11,7 +11,7 @@ const Cart = () => {
    const {data} =useGetUserCart()
    const {mutate:deleteCartItem}=useDeleteCartItem()
    const {mutate:updateCart,isLoading:updatingCartItem}=useUpdateCartItem()
-   console.log(data)
+  
    
    useEffect(()=>{
     window.scrollTo(0,0);
@@ -58,12 +58,12 @@ const Cart = () => {
                       <h1 className=" opacity-75 font-semibold">
                         {item.title}
                       </h1>
-                      <h3 className="line-through font-thin">
+                      <h3 className=" line-through font-thin">
                         Rs {item.price}
                       </h3>
                       <h2>Rs {item.discountedPrice}</h2>
                       <p className=" font-light">color:{item.color}</p>
-                      <p>size:{item.size}</p>
+                      {item.size ? <p>size:{item.size}</p> : ""} 
                     </div>
                     <div className="flex gap-2 border border-slate-500 px-2">
                       <button
@@ -120,10 +120,7 @@ const Cart = () => {
             <p>Discounted Price</p>
             <p>Rs {data?.data.discounts}</p>
           </div>
-          <div className="flex justify-between items-center my-4">
-            <p>Delivery Charge</p>
-            <p>0.00</p>
-          </div>
+         
           <hr />
           <div className="flex justify-between items-center my-4">
             <p>Total</p>

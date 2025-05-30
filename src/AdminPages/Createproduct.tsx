@@ -5,21 +5,30 @@ import * as Yup from "yup";
 
 import { FormValues } from "../types/types";
 import { useProductPost } from "../hooks/useProductPost";
+import { Breadcrumb } from "antd";
 
 const CreateProduct = () => {
     const {mutate}=useProductPost()
   return (
+    <>
+    <Breadcrumb
+            style={{ marginBottom: "16px" }}
+            items={[{ title: "Vaidik" }, { title: "Create Product" }]}
+          />
     <Formik<FormValues>
       initialValues={{
         brand: "",
         title: "",
         imageUrl: "",
         color: "",
+        unit:"",
         price: 0,
         discountedPercent: 0,
         discountedPrice: 0,
         description: "",
         quantity: 0,
+        pujaName:"",
+        puja_quantity:0,
         sizes: [
           { name: "S", quantity: 0 },
           { name: "M", quantity: 0 },
@@ -27,20 +36,20 @@ const CreateProduct = () => {
         ],
       }}
       validationSchema={Yup.object({
-        brand: Yup.string().required("Brand is required"),
+        brand: Yup.string(),
         title: Yup.string().required("Title is required"),
+        puja_quantity:Yup.number(),
         imageUrl: Yup.string().url().required("Image URL is required"),
-        color: Yup.string().required("Color is required"),
+        color: Yup.string(),
         price: Yup.number()
           .required("Price is required")
           .positive("Price must be positive"),
+          unit: Yup.string()
+          .required("Unit is required"),
         discountedPercent: Yup.number()
-          .required("Discount percentage is required")
           .min(0, "Discount percentage cannot be less than 0")
           .max(100, "Discount percentage cannot exceed 100"),
-        discountedPrice: Yup.number()
-          .required("Discounted price is required")
-          .positive("Price must be positive"),
+  
         quantity: Yup.number()
           .required("Quantity is required")
           .min(0, "Quantity cannot be negative"),
@@ -51,14 +60,15 @@ const CreateProduct = () => {
             quantity: Yup.number()
               .required("Quantity is required")
               .min(0, "Quantity cannot be negative"),
-          })
+          }),
+        
         ),
+        pujaName:Yup.string().required("Puja Name is required"),
       })}
-      onSubmit={(values, { setSubmitting,resetForm }) => {
-        console.log(values);
+      onSubmit={(values, { setSubmitting }) => {
         mutate(values);
         setSubmitting(false);
-        resetForm();
+    
       }}
     >
       {({ touched, errors, values, getFieldProps }) => (
@@ -130,6 +140,50 @@ const CreateProduct = () => {
             />
             <ErrorMessage
               name="imageUrl"
+              component="div"
+              className="text-red-500 text-sm mt-2"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="color"
+              className="block mb-2 font-semibold text-gray-700"
+            >
+              Used For
+            </label>
+            <Field
+              name="pujaName"
+              type="text"
+              className={`w-full p-2 border rounded-md ${
+                touched.pujaName && errors.pujaName
+                  ? "border-red-500"
+                  : "border-green-500"
+              }`}
+            />
+            <ErrorMessage
+              name="pujaName"
+              component="div"
+              className="text-red-500 text-sm mt-2"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="color"
+              className="block mb-2 font-semibold text-gray-700"
+            >
+              Unit
+            </label>
+            <Field
+              name="unit"
+              type="text"
+              className={`w-full p-2 border rounded-md ${
+                touched.unit && errors.unit
+                  ? "border-red-500"
+                  : "border-green-500"
+              }`}
+            />
+            <ErrorMessage
+              name="unit"
               component="div"
               className="text-red-500 text-sm mt-2"
             />
@@ -280,6 +334,28 @@ const CreateProduct = () => {
               className="text-red-500 text-sm mt-2"
             />
           </div>
+          <div className="mb-4">
+            <label
+              htmlFor="puja_quantity"
+              className="block mb-2 font-semibold text-gray-700"
+            >
+            Default Product Quantity used For the puja
+            </label>
+            <Field
+              name="puja_quantity"
+              type="number"
+              className={`w-full p-2 border rounded-md ${
+                touched.puja_quantity && errors.puja_quantity
+                  ? "border-red-500"
+                  : "border-green-500"
+              }`}
+            />
+            <ErrorMessage
+              name="price"
+              component="div"
+              className="text-red-500 text-sm mt-2"
+            />
+          </div>
 
           <div className="mb-4">
             <label
@@ -314,6 +390,7 @@ const CreateProduct = () => {
         </Form>
       )}
     </Formik>
+    </>
   );
 };
 

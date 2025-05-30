@@ -4,8 +4,13 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
+import { DownOutlined } from '@ant-design/icons';
 import Autocomplete from "@mui/material/Autocomplete";
-import {  Typography } from "antd";
+
+import type { MenuProps } from 'antd';
+import { Dropdown, Space } from 'antd';
+
+import { Typography } from "antd";
 import {
   Avatar,
   Box,
@@ -15,13 +20,13 @@ import {
   Menu,
   MenuItem,
   Tooltip,
-
 } from "@mui/material";
 import { Logout, PersonAdd, Settings } from "@mui/icons-material";
 
 
 const Header = () => {
   const navigate = useNavigate();
+
 
   const [isuser, setisUser] = useState<string | null>(() => {
     return localStorage.getItem("currentUser");
@@ -38,28 +43,81 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    
-      localStorage.removeItem("role");
-      localStorage.removeItem("token");
-      localStorage.removeItem("currentUser");
-      setisUser(null);
-      navigate("/");
-    
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    localStorage.removeItem("currentUser");
+    setisUser(null);
+    navigate("/");
   };
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+      <span onClick={()=>{navigate("/bratabandha")}}>Bratabanda</span>
+        
+        
+    
+      ),
+    },   {
+      key: '2',
+      label: (
+      <span>Bihe</span>
+        
+        
+    
+      ),
+    },
+    {
+      key: '3',
+      label: (
+      <span>Chaurashi</span>
+        
+        
+    
+      ),
+    },   {
+      key: '4',
+      label: (
+      <span>Saptaha</span>
+        
+        
+    
+      ),
+    },
+    {
+      key: '5',
+      label: (
+      <span>Nwaran</span>
+        
+        
+    
+      ),
+    },
+  ];
 
   return (
     <>
       <div className="flex justify-between py-3 items-center px-5 fixed top-0 left-0 w-full bg-white z-50">
-        <div className="flex gap-5 cursor-pointer">
-          <h4 onClick={() => navigate("/clothes/men")}>Men</h4>
-          <h4 onClick={() => navigate("/clothes/women")}>Women</h4>
+        <div className="flex gap-5 cursor-pointer items-center">
+          <h4 onClick={() => navigate("/clothes/men")}>Kurtha</h4>
+          <h4>Our Store</h4>
+          <Dropdown menu={{ items }}>
+          <a onClick={(e) => e.preventDefault()}>
+        <Space className="w-80">
+           Puja
+        <DownOutlined />
+      </Space>
+    </a>
+  </Dropdown>
+         
         </div>
         <div>
           <h1
-            className="text-2xl font-bold cursor-pointer"
+            className="text-2xl font-bold cursor-pointer "
             onClick={() => navigate("/")}
+
           >
-            Vastra
+            <span style={{color:"#FE5D26"}}>Vaidik</span> Suppliers
           </h1>
         </div>
         <div className="flex gap-3 cursor-pointer items-center">
@@ -119,14 +177,17 @@ const Header = () => {
               >
                 <Tooltip title="Account settings">
                   <IconButton
-                    
                     onClick={handleClick}
                     size="small"
                     aria-controls={open ? "account-menu" : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
                   >
-                    <Avatar sx={{ width: 32, height: 32,backgroundColor:"#333" }}>{isuser?.split("")[0]}</Avatar>
+                    <Avatar
+                      sx={{ width: 32, height: 32, backgroundColor: "#333" }}
+                    >
+                      {isuser?.split("")[0]}
+                    </Avatar>
                   </IconButton>
                 </Tooltip>
               </Box>
@@ -190,9 +251,7 @@ const Header = () => {
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>
-                  <div onClick={handleLogout}>
-                  Logout
-                  </div>
+                  <div onClick={handleLogout}>Logout</div>
                 </MenuItem>
               </Menu>
             </>
@@ -202,7 +261,6 @@ const Header = () => {
             //   onClick={() => navigate("/login")}
             // />
             <Typography
-              
               onClick={() => navigate("/login")}
               className="py-2 text-lg font-semibold"
             >

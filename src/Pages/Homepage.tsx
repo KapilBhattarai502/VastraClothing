@@ -1,7 +1,9 @@
-import React from "react";
+
 import MainCarousel from "../components/Carousel/MainCarousel";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
+
 
 
 
