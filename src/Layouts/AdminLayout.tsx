@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   DesktopOutlined,
+  FileAddOutlined,
   PieChartOutlined,
   
 } from "@ant-design/icons";
@@ -34,8 +35,10 @@ const items: MenuItem[] = [
   getItem("Admin", "dashboard", <PieChartOutlined />),
   getItem("View Products", "viewproducts", <DesktopOutlined />),
   getItem("AddProduct", "addproduct", <PlusOneOutlined />),
+  getItem("Add Properties", "addproperties", <FileAddOutlined />),
   getItem("Orders", "orders", <PlusOneOutlined />),
   getItem("Logout", "logout", <PieChartOutlined />),
+ 
 
  
 ];

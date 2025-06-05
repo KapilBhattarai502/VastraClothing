@@ -12,7 +12,7 @@ interface selectProps{
   options:optionsProp[],
   label:string,
   setFieldValue:any,
-  errorValue:string|undefined,
+  errorValue:string|undefined|boolean,
   className:string
   
 

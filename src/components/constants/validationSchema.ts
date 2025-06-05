@@ -1,6 +1,9 @@
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 export const productDetailsvalidationSchema = Yup.object().shape({
-    size: Yup.string()
-      .oneOf(['S', 'M', 'L'], 'Size must be one of: small, medium, or large')
-  });
+  size: Yup.string().when('$isClothes', (isClothes, schema) =>
+    isClothes
+      ? schema.required("Size is required for clothes")
+      : schema.notRequired()
+  ),
+});

@@ -1,7 +1,7 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { NEWUSER } from "../types/types";
-import { useRegisterUser } from "../hooks/useRegisterUser";
+import { useRegisterUser } from "../hooks/Post/useRegisterUser";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react"; // Import useState
 import { Visibility, VisibilityOff } from "@mui/icons-material"; // Import MUI Icons for password visibility toggle

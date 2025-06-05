@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Button } from 'antd';
 import { generateSignature } from '../../components/e-sewaIntegration/signatureGenertaion';
 import generateTransactionUUID from '../../components/e-sewaIntegration/transactionUuid';
+import { InnerOuletWrapper, OutletWrapper } from '../../components/commonStyle/wrapper/OutletWrapper';
 
 
 const PaymentPage = () => {
@@ -67,9 +68,14 @@ const PaymentPage = () => {
   }
   
   return (
-    <div className='mt-20 grid grid-cols-12 gap-3.5'>
+    <OutletWrapper>
+      <InnerOuletWrapper>
+  
+   
+     <p className=' font-semibold'>Select Payment Method</p>
+    <div className='grid grid-cols-12 gap-3.5'>
         <div className='col-span-8'>
-          <p className=' font-semibold'>Select Payment Method</p>
+         
           <div className=' grid grid-cols-12 gap-1 mt-2 cursor-pointer'>
             <div className='col-span-2 border text-center py-4' onClick={()=>setPaymentMethod("credit/debit")}>
             <CreditCardOutlined style={{fontSize:"1.5rem"}} />
@@ -90,8 +96,8 @@ const PaymentPage = () => {
           
           </div>
           {
-            paymentMethod ==="cashOnDelivery" && <div className='border-2 mt-4 p-2'>
-              <p>
+            paymentMethod ==="cashOnDelivery" && <div className='border-2 mt-4 py-2 px-4 bg-white'>
+              <p className='mb-2'>
               You may pay in cash to our courier upon receiving your parcel at the doorstep<br/>
              - Before agreeing to receive the parcel, check if your delivery status has been updated to 'Out for Delivery'<br/>
              - Before receiving, confirm that the airway bill shows that the parcel is from Vaidik<br/>
@@ -102,8 +108,8 @@ const PaymentPage = () => {
             </div>
           }
           {
-            paymentMethod ==="esewa" && <div className='border-2 mt-4 p-2'>
-              <p>
+            paymentMethod ==="esewa" && <div className='border-2 mt-4 py-2 px-4 bg-white'>
+              <p className='mb-2'>
               You have chosen eSewa as your payment method.<br/>
               -After confirming your order, you will be redirected to the eSewa payment page where you can complete the transaction securely using your eSewa ID or mobile number.              </p>
               <Button style={{color:"#fff",backgroundColor:"#5CB544"}} onClick={handleEsewaPayment}>Pay Now</Button>
@@ -113,23 +119,20 @@ const PaymentPage = () => {
 
         </div>
        
-        <div className="shadow-xl px-5 py-4  rounded-md col-span-3">
+        <div className="shadow-xl px-5 py-1 max-h-32 rounded-md col-span-3 bg-white">
             <h1 className="mb-3 font-bold opacity-75 text-xl">Order summary</h1>
             <hr />
             <div className="flex justify-between items-center my-4">
               <p>Total</p>
               <p>Rs {totalAmount}</p>
             </div>
-            <button
-              className="w-full text-center bg-slate-900 text-white py-2 mt-8"
-            //   onClick={handleCheckout}
-            >
-              Checkout
-            </button>
           </div>
          
 
         </div>
+        </InnerOuletWrapper>
+  
+    </OutletWrapper>
 
   )
 }

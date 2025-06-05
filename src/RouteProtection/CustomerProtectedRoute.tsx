@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 const CustomerProtectedRoute = ({children}:any) => {
     const navigate=useNavigate()
     const validUser=localStorage.getItem('token');
+    const role=localStorage.getItem("role")?.toLocaleLowerCase()
 
     useEffect(()=>{
         if(!validUser){
@@ -15,7 +16,7 @@ const CustomerProtectedRoute = ({children}:any) => {
     },[])
   return (
     <>
-    {validUser ? children :null }
+    {validUser && role ==="CUSTOMER" ? children :null }
     </>
   )
 }

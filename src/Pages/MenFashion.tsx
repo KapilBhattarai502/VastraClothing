@@ -15,7 +15,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Pagination } from "antd";
-import { useGetMenFashion } from "../hooks/useGetMenFashion";
+import { useGetMenFashion } from "../hooks/Get/useGetMenFashion";
 
 const MenFashion = () => {
   // State for page number

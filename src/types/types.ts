@@ -24,6 +24,11 @@ export interface Size {
     name: string;
     quantity: number;
   }
+
+export interface OPTION {
+    label:string,
+    value:string
+}
   
  export  interface FormValues {
     brand: string;
@@ -36,7 +41,7 @@ export interface Size {
     quantity: number;
     description: string;
     sizes: Size[];
-    pujaName:String;
+    pujaName:OPTION[];
     puja_quantity:Number,
     unit:String
   }
@@ -47,4 +52,12 @@ export interface Size {
     role:string,
     email:string,
     password:string
+  }
+
+  export interface PAYMENTINFO{
+    product_code:string,
+    transaction_uuid:string,
+    total_amount:number,
+    status:string,
+    ref_id:string
   }

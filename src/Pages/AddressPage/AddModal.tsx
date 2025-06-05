@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import InputText from "../../components/input-text/input-text";
 import Select from "../../components/select/select";
 import { addAddress } from '../../feature/Slice/userAddressSlice';
-import { usePostAddress } from '../../hooks/usePostAddress';
+import { usePostAddress } from '../../hooks/Post/usePostAddress';
 const countryOptions = [
     { label: "USA", value: "USA" },
     {

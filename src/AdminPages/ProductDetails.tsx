@@ -1,6 +1,6 @@
 import  { useEffect} from "react";
 import { useParams } from "react-router-dom";
-import { useGetProductById } from "../hooks/useGetProductById";
+import { useGetProductById } from "../hooks/Get/useGetProductById";
 
 
 

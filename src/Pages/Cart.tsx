@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import { useGetUserCart } from '../hooks/useGetUserCart'
+import { useGetUserCart } from '../hooks/Get/useGetUserCart'
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDeleteCartItem } from '../hooks/useDeleteCartItem';
-import { useUpdateCartItem } from '../hooks/useUpdateCartItem';
+import { useDeleteCartItem } from '../hooks/Delete/useDeleteCartItem';
+import { useUpdateCartItem } from '../hooks/Post/useUpdateCartItem';
 import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
@@ -28,7 +28,7 @@ const Cart = () => {
 
    }
    const handleCheckout=()=>{
-    navigate("/clothes/address")
+    navigate("/vaidik/address")
    }
   return (
     <div className="mt-20">
@@ -109,7 +109,7 @@ const Cart = () => {
             </p>
           )}
         </div>
-        <div className="basis-96 mr-10 shadow-xl px-5 py-4 h-[340px] rounded-md">
+        <div className="basis-96 mr-10 shadow-xl px-5 py-4 h-[340px] rounded-md mb-20">
           <h1 className="mb-3 font-bold opacity-75 text-xl">Order summary</h1>
           <hr />
           <div className="flex justify-between items-center my-4">

@@ -7,9 +7,9 @@ import InputText from "../../components/input-text/input-text";
 import Select from "../../components/select/select";
 
 import PaymentStepper from "../../components/stepper/stepper";
-import { useGetUserProfile } from "../../hooks/useGetUserProfile";
-import { useGetUserCart } from "../../hooks/useGetUserCart";
-import { useCreateOrder } from "../../hooks/useCreateOrder";
+import { useGetUserProfile } from "../../hooks/Get/useGetUserProfile";
+import { useGetUserCart } from "../../hooks/Get/useGetUserCart";
+import { useCreateOrder } from "../../hooks/Post/useCreateOrder";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addAddress } from "../../feature/Slice/userAddressSlice";
@@ -20,7 +20,8 @@ import { generateSignature } from "../../components/e-sewaIntegration/signatureG
 
 import axios from "axios";
 import AddressDrawer from "./Drawer";
-import { useGetAddress } from "../../hooks/useGetAddress";
+import { useGetAddress } from "../../hooks/Get/useGetAddress";
+import { OutletWrapper } from "../../components/commonStyle/wrapper/OutletWrapper";
 
 
 const AddressPage = () => {
@@ -43,7 +44,7 @@ const AddressPage = () => {
      
 
       if (CartItems) {
-        navigate(`/clothes/payment?total_amount=${CartItems?.data.totalDiscountedPrice}&product_code="EPAYTEST"`)
+        navigate(`/vaidik/payment?total_amount=${CartItems?.data.totalDiscountedPrice}&product_code="EPAYTEST"`)
 
         // const tax_amount="0";
         // const product_delivery_charge="0"
@@ -97,12 +98,11 @@ const AddressPage = () => {
   };
 
   return (
-    <div className="mt-20">
-      <PaymentStepper activeStep={0}></PaymentStepper>
-      <ComponentWrapper>
-         <div className="flex justify-between  mt-20 gap-12 ">
+   <div>
+      <OutletWrapper>
+         <div className="flex justify-between gap-12 mt-4 mx-4 ">
            <div className="flex-1">
-            <div className="shadow-lg px-6 py-3 rounded-md overflow-y-auto mb-4">
+            <div className="shadow-lg px-6 py-3 rounded-md overflow-y-auto mb-4 bg-white">
               <div className="flex justify-between cursor-pointer">
                 <p>Shipping address</p>
                 <p className=" text-blue-400"  onClick={() => {
@@ -110,8 +110,8 @@ const AddressPage = () => {
                 }}>Add/Edit</p>
               </div>
               <div className="mt-2">
-              {userAddress?.data?.userCurrentAddress?.map((address:any)=> 
-        <div className='border px-1 py-1 mb-4'>
+            {userAddress?.data?.userCurrentAddress?.map((address:any)=> 
+          <div className='border px-1 py-1 mb-4'>
           <div key={address._id} className=' mb-4 pt-2 pb-6 px-2'>
           <div className='flex gap-3'>
           <p>{address.firstName} </p>
@@ -132,7 +132,7 @@ const AddressPage = () => {
               </div>
 
             </div>
-            <div className="flex-grow">
+            <div className="flex-grow bg-white">
             {CartItems?.data.cartItems.length > 0 ? (
               CartItems?.data.cartItems.map((item: any) => (
                 <div key={item._id} className=" h-[200px] shadow-lg  px-4 mb-6">
@@ -171,7 +171,7 @@ const AddressPage = () => {
             )}
           </div>
           </div>
-        <div className="basis-96 mr-10 shadow-xl px-5 py-4 h-[340px] rounded-md">
+        <div className="basis-96 mr-10 shadow-xl px-5 py-4 h-[340px] rounded-md bg-white">
             <h1 className="mb-3 font-bold opacity-75 text-xl">Order summary</h1>
             <hr />
             <div className="flex justify-between items-center my-4">
@@ -200,7 +200,7 @@ const AddressPage = () => {
             </button>
           </div>
          </div>
-      </ComponentWrapper>
+      </OutletWrapper>
       <AddressDrawer open={open} setOpen={setOpen}/>
     </div>
   );

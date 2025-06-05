@@ -71,15 +71,14 @@ const Card = ({ product,setCurrentUserPujaItems }: any) => {
   return (
 
     <div
-      className="p-2 shadow-lg rounded-md"
-      
+      className="p-2 shadow-lg rounded-md col-span-6" 
     >
-      <div className="h-[600px]">
+      <div className="h-[500px]">
         <img
           src={imageUrl}
           onClick={()=>{
             console.log("clicked")
-             navigate(`/clothes/productpage/${_id}`)
+             navigate(`/vaidik/productpage/${_id}`)
             
           }}
           alt=""
@@ -97,7 +96,10 @@ const Card = ({ product,setCurrentUserPujaItems }: any) => {
           
           <PlusCircleOutlined onClick={()=>handleIncrease(_id)}/>
           </div>
-          <p>Unit : {unit}</p>
+          <div className="flex ">
+          <p>Unit  </p>
+          <p>:{unit}</p>
+          </div>
           <Button danger onClick={()=>handleRemove(_id)}>Remove</Button>
          
         </div>

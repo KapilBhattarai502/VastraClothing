@@ -17,17 +17,22 @@ import Cart from "./Pages/Cart";
 import AddressPage from "./Pages/AddressPage/AddressPage";
 import EsewaErrorPage from "./components/e-sewaIntegration/pages/EsewaErrorPage";
 import Bratabandha from "./Pages/Bratabandha";
-import OrderPage from "./AdminPages/OrderPage";
 import EsewaProtectedRoute from "./RouteProtection/EsewaProtectedRoute";
 import EsewaSuccesPage from "./components/e-sewaIntegration/pages/EsewaSuccesPage";
 import PaymentPage from "./Pages/PaymentPage/PaymentPage";
+import UserOrderPage from "./Pages/OrderPage/UserOrderPage";
+import StorePage from "./Pages/StorePage/StorePage";
+import FunctionPage from "./Pages/FunctionPage/FunctionPage";
+import LandingPage from "./Pages/LandingPage/index";
+import AddProperties from "./AdminPages/AddProperties";
+import OrderPage from "./AdminPages/OrderPage/OrderPage";
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route path="/" element={<Navigate to="vaidik/landingpage"/>} />
           <Route path="/login" element={<Loginpage />} />
           <Route
             path="/admin"
@@ -41,41 +46,43 @@ const App = () => {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="viewproducts" element={<Viewproductpage />} />
             <Route path="addproduct" element={<Createproduct />} />
-            <Route path="orders" element={<OrderPage/>}/>
-            <Route path="productpage/:id" element={<ProductDetails/>}/>
+            <Route path="addproperties" element={<AddProperties />} />
+            <Route path="orders" element={<OrderPage />} />
+            <Route path="productpage/:id" element={<ProductDetails />} />
             <Route path="logout" element={<Logout />} />
           </Route>
-          <Route
-          path="bratabandha"
-          element={<Bratabandha/>}
-          
-          >
 
-          </Route>
           <Route
-            path="clothes"
+            path="vaidik"
             element={
               <CustomerProtectedRoute>
                 <CustomerLayout />
               </CustomerProtectedRoute>
             }
           >
-            <Route index element={<Navigate to="men" replace />} />
-            <Route path="men" element={<MenFashion />} />
-            <Route path="payment" element={<PaymentPage/>}/>
-            <Route path="productpage/:id" element={<CustomerProductDetails/>}/>
-            <Route path="cart" element={<Cart/>}/>
-            <Route path="address" element={<AddressPage/>}/>
-            <Route path="order" element={<OrderPage/>}/>
-            {/* <Route path='esewa-error' element={<EsewaErrorPage/>}/> */}
+            <Route index element={<Navigate to="landingpage" replace />} />
+            <Route path="landingpage" element={<LandingPage />} />
+            <Route path="kurtha" element={<MenFashion />} />
+
+            <Route path="payment" element={<PaymentPage />} />
+            <Route
+              path="productpage/:id"
+              element={<CustomerProductDetails />}
+            />
+            <Route path="cart" element={<Cart />} />
+            <Route path="address" element={<AddressPage />} />
+            <Route path="order" element={<OrderPage />} />
+            <Route path="user/orders" element={<UserOrderPage />} />
+            <Route path="store" element={<StorePage />} />
+            <Route path="functions" element={<FunctionPage />} />
           </Route>
           {/* <Route path="esewa" element={
             <EsewaProtectedRoute>
             </EsewaProtectedRoute>
           }> */}
-            {/* <Route index element={<Navigate to="success" replace/>}/> */}
-            <Route path="esewa/success" element={<EsewaSuccesPage/>}/>
-            <Route path="esewa/error"  element={<EsewaErrorPage/>}/>
+          {/* <Route index element={<Navigate to="success" replace/>}/> */}
+          <Route path="esewa/success" element={<EsewaSuccesPage />} />
+          <Route path="esewa/error" element={<EsewaErrorPage />} />
           {/* </Route> */}
           <Route path="/register" element={<Registerpage />} />
         </Routes>

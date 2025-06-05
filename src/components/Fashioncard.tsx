@@ -10,7 +10,7 @@ const FashionCard = ({ product }: any) => {
     if (role) {
       role === "admin"
         ? navigate(`/admin/productpage/${_id}`)
-        : navigate(`/clothes/productpage/${_id}`);
+        : navigate(`/vaidik/productpage/${_id}`);
     }
   };
 

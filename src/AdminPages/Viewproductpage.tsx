@@ -1,5 +1,5 @@
 
-import { useGetProduct } from '../hooks/useGetProduct'
+import { useGetProduct } from '../hooks/Get/useGetProduct'
 import FashionCard from '../components/Fashioncard'
 import { FormValues } from '../types/types';
 import { Breadcrumb, Pagination } from 'antd';
