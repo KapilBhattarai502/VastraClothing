@@ -74,7 +74,6 @@ const AddModal: React.FC = ({isModalOpen,setIsModalOpen}:any) => {
                 onSubmit={(values, { setSubmitting,resetForm }) => {
                     mutate(values, {
                         onSuccess: (data) => {
-                          console.log('Address added:', data);
                           setIsModalOpen(false);
                           resetForm();
                         },

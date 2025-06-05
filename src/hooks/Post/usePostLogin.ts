@@ -8,7 +8,6 @@ export const usePostLogin=()=>{
     const navigate=useNavigate();
 
     const userLogin=async(data:LoginType)=>{
-        console.log('query data',data)
         return await axios.post("http://localhost:6464/auth/login",data)
     }
 
@@ -16,7 +15,7 @@ export const usePostLogin=()=>{
         
     {
         onSuccess:({data}:any)=>{
-            console.log(data)
+            
 
             localStorage.setItem('token',data.token)
             localStorage.setItem('role',data.user.role)

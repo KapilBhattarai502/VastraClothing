@@ -29,10 +29,4 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
     return btoa(binary);
 }
 
-// Example usage:
-// generateSignature(
-//     "8gBm/:&EnhH.1/q", // Secret key
-//     `total_amount=${CartItems?.data.totalDiscountedPrice},transaction_uuid=${transaction_uuid},product_code=EPAYTEST`
-// ).then((signature) => {
-//     console.log("Generated Signature:", signature);
-// });
+

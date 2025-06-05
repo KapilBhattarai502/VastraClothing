@@ -84,7 +84,6 @@ const CreateProduct = () => {
             .required("Puja Name is required"),
         })}
         onSubmit={(values, { setSubmitting }) => {
-          console.log("Values is",values)
           // mutate(values);
           // setSubmitting(false);
         }}

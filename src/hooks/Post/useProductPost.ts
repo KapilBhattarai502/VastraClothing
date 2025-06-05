@@ -21,7 +21,6 @@ export const useProductPost=()=>{
     return useMutation(createProduct,{
         onSuccess:({data})=>{
             queryClient.invalidateQueries('getProducts');
-            console.log(data);
             message.success("Product Created Successfully")
             
 

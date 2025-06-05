@@ -56,7 +56,6 @@ const CustomerProductDetails = () => {
         useEffect(() => {
           validateForm();
         }, [data, validateForm]);
-        console.log("errors is",errors)
         return (
         <div className="mt-20 grid grid-cols-2 p-4 gap-28">
           {/* image */}

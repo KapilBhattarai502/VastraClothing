@@ -10,7 +10,7 @@ const ProductDetails = () => {
   useEffect(() => {
     mutate(id);
   }, [id]);
-  console.log(data);
+
 
  
   return (

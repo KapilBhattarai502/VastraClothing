@@ -26,11 +26,14 @@ import FunctionPage from "./Pages/FunctionPage/FunctionPage";
 import LandingPage from "./Pages/LandingPage/index";
 import AddProperties from "./AdminPages/AddProperties";
 import OrderPage from "./AdminPages/OrderPage/OrderPage";
+import Marriage from "./Pages/FunctionPage/Marriage";
 
 const App = () => {
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter
+      
+      >
         <Routes>
           <Route path="/" element={<Navigate to="vaidik/landingpage"/>} />
           <Route path="/login" element={<Loginpage />} />

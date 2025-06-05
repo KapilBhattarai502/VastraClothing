@@ -3,7 +3,7 @@ import api from "../../Config/api"
 import { message } from "antd";
 
 const updateCart=async({cartItemId,quantity}:{cartItemId:string,quantity:number})=>{
-    console.log(cartItemId,quantity)
+    
  
 
     return await api.put(`/api/cart_items/${cartItemId}`,{quantity});

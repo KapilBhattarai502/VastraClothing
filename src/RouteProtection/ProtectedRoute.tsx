@@ -8,8 +8,6 @@ const ProtectedRoute = ({children}:any) => {
   const token=localStorage.getItem("token")
 
 
-  console.log(role,token)
-
   useEffect(()=>{
     if(!(role==='admin'&&token)){
       message.warning("you are not allowed ")

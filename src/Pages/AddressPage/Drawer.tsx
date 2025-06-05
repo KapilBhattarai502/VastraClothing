@@ -35,7 +35,6 @@ const AddressDrawer: React.FC = ({ open, setOpen }: any) => {
   const toggleAddModal = () => {
     setOpenAddModal((prev) => !prev);
   };
-  console.log("user aDDRESS IS ", userAddress);
 
   return (
     <>

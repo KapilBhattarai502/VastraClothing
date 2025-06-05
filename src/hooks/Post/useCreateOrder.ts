@@ -16,7 +16,6 @@ export const useCreateOrder = () => {
   return useMutation(createOrder, {
     onSuccess: ({ data }) => {
       queryClient.invalidateQueries("getUserOrder");
-      console.log("order Data is", data);
       navigate("/vaidik/user/orders");
     },
     onError: () => {

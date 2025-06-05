@@ -15,7 +15,7 @@ const UserOrderPage = () => {
 
   const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
     console.log(info?.source, value);
-  console.log("data", data);
+
   return (
     <div>
       <OutletWrapper>

@@ -22,7 +22,7 @@ const Orders = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const {data:orders}=useGetAllOrder()
-  console.log("data is",orders)
+
 
  
 

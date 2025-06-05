@@ -37,7 +37,6 @@ const Loginpage = () => {
           .required("Password is required"),
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        console.log(values);
         mutate(values);
         setSubmitting(false);
         resetForm();

@@ -16,7 +16,7 @@ const CustomerProtectedRoute = ({children}:any) => {
     },[])
   return (
     <>
-    {validUser && role ==="CUSTOMER" ? children :null }
+    {validUser  ? children :null }
     </>
   )
 }

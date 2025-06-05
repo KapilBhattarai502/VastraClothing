@@ -1,171 +1,233 @@
-import React, { useEffect, useState } from "react";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { useSearchParams } from "react-router-dom";
-import FilterListIcon from "@mui/icons-material/FilterList";
-type SearchProps = GetProps<typeof Input.Search>;
-import type { GetProps } from 'antd';
-import { Button, Pagination, message } from "antd";
-import { Input } from 'antd';
-import { useAddCart } from "../../hooks/Post/useAddCart";
-import Card from "../../components/Cards/Bratabandha";
-import CircleProgress from "../../components/CircularProgress";
-import { useGetFashionItems } from "../../hooks/Get/useGetFashionItems";
+import React, { useState } from "react";
+import { Download, ShoppingCart } from "lucide-react";
+// import Navbar from '../components/Navbar';
+// import SearchBar from '../components/SearchBar';
+import ProductCard from "./components/ProductCard";
+import { useParams, useSearchParams } from "react-router-dom";
+import { Input, Space, message } from "antd";
+import type { GetProps } from "antd";
 
+import { useGetFashionItems } from "../../hooks/Get/useGetFashionItems";
+import { Category } from "@mui/icons-material";
+import { useAddCart } from "../../hooks/Post/useAddCart";
+
+type SearchProps = GetProps<typeof Input.Search>;
+
+const { Search } = Input;
+
+interface Product {
+  _id: string;
+  title: string;
+  price: number;
+  discountedPrice:number;
+  imageUrl: string;
+  description: string;
+  pujaName: string[];
+  puja_quantity:string;
+  unit:string;
+}
+
+interface ProductQuantity {
+  [productId: string|number]: number;
+}
 
 const FunctionPage = () => {
-  // State for page number
-  const [currentPage, setCurrentPage] = useState(1);
-  const [category,setCategory]=useState<string|null>(null)
-  const { Search } = Input;
-  const [currentUserPujaItems,setCurrentUserPujaItems]=useState(null)
-  const [params,setParams]= useSearchParams()
-
-  // Call useGetMenFashion with the current page number
-  const {isLoading,data,refetch}=useGetFashionItems(category)
-
-  const [sortBy, setSortBy] = React.useState("bestMatch");
-  const [searchParams, setSearchParams] = useSearchParams();
-  const colorValue = searchParams.get("colors");
-  const priceValue = searchParams.get("Price");
-      const { mutate: addToCart } = useAddCart();
-
-      const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
-
-    useEffect(()=>{
-        if(params){
-            setCategory(params.get("category"))
-        }
-
-    },[params])
-    useEffect(()=>{
-        if(data){
-            setCurrentUserPujaItems(data)
-        }
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProducts, setSelectedProducts] = useState<Set<string|unknown>>(
+    new Set()
+  );
+  const [quantities, setQuantities] = useState<any>({});
+  const [params] = useSearchParams();
+  const category =params.get("category")
+  const {data:Products}=useGetFashionItems(category)
+  const {mutate:addToCart}=useAddCart()
 
 
 
-    },[data])
-    const handleReset = async () => {
-      const response = await refetch()
-      if (response?.data) {
-        setCurrentUserPujaItems(response.data)
+
+  const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
+    console.log(info?.source, value);
+
+
+
+  // Initialize selected products with default package items and default quantities
+  React.useEffect(() => {
+    const defaultSelected = new Set(
+      Products
+        ?.filter((product:any) => product?.pujaName.includes(category))
+        ?.map((product:any) => product._id)
+    );
+    setSelectedProducts(defaultSelected);
+
+
+
+
+    // Initialize quantities for default selected items
+    const defaultQuantities: any = {};
+
+    Products?.forEach((product:any) => {
+      if (product) {
+        defaultQuantities[product._id] = product?.puja_quantity;
       }
+    });
+    setQuantities(defaultQuantities);
+  }, [Products]);
+
+  const filteredProducts = Products?.filter(
+    (product) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product?.pujaName[0].toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleToggleProduct = (product: Product) => {
+    const newSelected = new Set(selectedProducts);
+    const newQuantities = { ...quantities };
+
+    if (newSelected.has(product?._id)) {
+      newSelected.delete(product?._id);
+      delete newQuantities[product?._id];
+    } else {
+      newSelected.add(product?._id);
+      newQuantities[product?._id] = product?.puja_quantity;
     }
-    const addFunctionPujaItems=()=>{
-      try {
-        currentUserPujaItems?.map((pujaItem:any)=>{
-          addToCart({productId:pujaItem._id,quantity:Number(pujaItem.puja_quantity)})
-          
-         
-        })
-        message.success("Added to Cart")
-        
-      } catch (error:any) {
-        console.log("Error adding to cart",error.message)
 
-        
-      }
-     
-
-    }
-
-
-  useEffect(()=>{
-    window.scrollTo(0,0);
-  },[currentPage])
-
-  const handleChange = (event: any) => {
-    setSortBy(event.target.value);
+    setSelectedProducts(newSelected);
+    setQuantities(newQuantities);
   };
 
+  const handleQuantityChange = (productId: string, quantity: number) => {
+  
+    setQuantities((prev:any) => ({
+      ...prev,
+      [productId]: quantity,
+    }));
+  };
+
+  const selectedProductsList = Products?.filter((product:any) =>
+    selectedProducts.has(product._id)
+  );
+
+  const totalPrice = selectedProductsList?.reduce((sum, product) => {
+    const quantity = quantities[product._id] || 1;
+    return sum + product?.discountedPrice * quantity;
+  }, 0);
+
+  const totalItems = Object.values(quantities).reduce(
+    (sum, quantity) => sum + Number(quantity) ,
+    0
+  );
 
 
+  const handleDownloadPDF = () => {
+    
+    alert("PDF download functionality would be implemented here");
+  };
 
-  // Handle page change for Pagination component
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handleAddToCart = () => {
+  
+    const packageProducts = Object.entries(quantities).map(([productId, quantity]) => ({
+      productId,
+      quantity: Number(quantity),
+    }))
+    try {
+      packageProducts?.map((product)=>addToCart({productId:product?.productId,quantity:product?.quantity}))
+      message.success(`Added your ${category} items to cart `)
+      
+    } catch (error) {
+
+      
+    }
+   
+   
   };
 
   return (
-    <div className="mt-18">
-      <div className="h-[40rem]">
-        <img
-          src="https://image.cdn2.seaart.me/2025-06-01/d0u260de878c73d287gg/345825a64cb53b6cc66b471934690640eaed1916_high.webp"
-          className=" w-full h-full object-cover"
-        />
-      </div>
-      <div className="px-10 py-12">
-        <div className=" grid grid-cols-4 gap-4">
-          {/* Filter Component */}
-          <div>
-            <div className="flex justify-between items-center">
-              <h4 className="mb-2">Filters</h4>
-              <FilterListIcon />
-            </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-rose-400 to-pink-500 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 capitalize">
+              {params?.get("category")} Package
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 opacity-90 capitalize">
+              Everything you need for your perfect {params?.get("category")} day
+            </p>
 
-            <hr />
-            <Search
-            className="mt-4"
-          placeholder="Search Here..."
-         allowClear
-         enterButton
-         size="large"
-         onSearch={onSearch}
-    />
-           
-          </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+              <button
+                onClick={handleDownloadPDF}
+                className="flex items-center space-x-2 bg-white text-rose-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
+                <Download className="h-5 w-5" />
+                <span className="capitalize">
+                  Download {params?.get("category")} Guide
+                </span>
+              </button>
 
-          {/* Products and Pagination */}
-          <div className="col-span-3">
-            <div className="flex flex-row-reverse">
-              <div className="w-[12rem]">
-                <FormControl fullWidth>
-                  <InputLabel id="sort-by-label">Sort by</InputLabel>
-                  <Select
-                    labelId="sort-by-label"
-                    id="sort-by-select"
-                    value={sortBy}
-                    label="SortBy"
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="bestMatch">Best Match</MenuItem>
-                    <MenuItem value="asc">Price (low to high)</MenuItem>
-                    <MenuItem value="desc">Price (high to low)</MenuItem>
-                  </Select>
-                </FormControl>
+              <div className="text-lg">
+                <span className="opacity-75">Package Total: </span>
+                <span className="font-bold text-2xl">Rs {totalPrice}</span>
               </div>
-            </div>
-            <div className="grid grid-cols-12 mt-2 gap-1">
-              {!isLoading ? (
-                currentUserPujaItems?.map((item:any)=>
-      
-                     <Card key={item?.itemName} product={item} setCurrentUserPujaItems={setCurrentUserPujaItems} currentUserPujaItems={currentUserPujaItems}/>)
-              ) : (
-                <div className="flex justify-center">
-                  <CircleProgress />
-                </div>
-              )}
-            </div>
-            <div className='text-center mt-4 flex gap-2 justify-center items-center'>
-     <Button onClick={()=>{addFunctionPujaItems()}}> Add To Cart</Button>
-        
-        <Button type='primary' onClick={handleReset}>Reset</Button></div>
-
-      
-     
-            <div className="mt-20">
-              <Pagination
-                align="center"
-                current={currentPage}
-                total={data?.totalPages * 10}
-                onChange={handlePageChange}
-              />
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Search and Summary Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0 ">
+          <Search
+            className="max-w-sm"
+            placeholder={`Search ${params.get("category")} product`}
+            allowClear
+            size="large"
+            onSearch={onSearch}
+          />
+
+          <div className="bg-white rounded-lg shadow-md p-4">
+            <div className="text-sm text-gray-600 ">
+              Selected Items: {totalItems}
+            </div>
+            <div className="font-bold text-rose-600">Total: Rs {totalPrice}</div>
+          </div>
+        </div>
+
+        {/* Add to Cart Button */}
+        {selectedProducts.size > 0 && (
+          <div className="mb-8 text-center">
+            <button
+              onClick={handleAddToCart}
+              className="bg-rose-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-rose-700 transition-colors flex items-center space-x-2 mx-auto"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              <span>Add All to Cart ({totalItems} items)</span>
+            </button>
+          </div>
+        )}
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredProducts?.map((product:any) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+              onToggleProduct={handleToggleProduct}
+              onQuantityChange={handleQuantityChange}
+              isInPackage={selectedProducts.has(product._id)}
+              quantity={quantities[product._id] || 1}
+            />
+          ))}
+        </div>
+
+        {filteredProducts?.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-gray-500 text-lg">
+              No products found matching your search.
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

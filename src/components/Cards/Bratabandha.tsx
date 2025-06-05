@@ -77,7 +77,7 @@ const Card = ({ product,setCurrentUserPujaItems }: any) => {
         <img
           src={imageUrl}
           onClick={()=>{
-            console.log("clicked")
+       
              navigate(`/vaidik/productpage/${_id}`)
             
           }}
