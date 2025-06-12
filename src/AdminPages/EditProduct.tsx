@@ -8,20 +8,19 @@ import { useGetUnit } from "../hooks/Get/useGetUnit";
 import { useGetPujaName } from "../hooks/Get/useGetPujaName";
 import { useGetPujaType } from "../hooks/Get/useGetPujaType";
 import { useGetPujaSubType } from "../hooks/Get/useGetPujaSubType";
-import { useGetProductById } from "../hooks/Get/useGetProductById";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { notification } from "antd";
 import { WarningOutlined } from "@ant-design/icons";
 import { useGetProductSizes } from "../hooks/Get/useGetProductSize";
 import { useGetProductColors } from "../hooks/Get/useGetProductColor";
+import { useUpdateProductDetails } from "../hooks/Put/useUpdateProductDetails";
+import { useGetProductById } from "../hooks/Get/useGetProductById";
+import { Spin } from 'antd';
 
 const animatedComponents = makeAnimated();
 
 const close = () => {
-  console.log(
-    "Notification was closed. Either the close button was clicked or duration time elapsed."
-  );
 };
 
 const EditProduct = () => {
@@ -34,11 +33,9 @@ const EditProduct = () => {
   const { data: pujaSubTypeOptions } = useGetPujaSubType();
   const { data: sizeOptions } = useGetProductSizes();
   const { data: colorOptions } = useGetProductColors();
-  const { mutate: getProductById, data: product } = useGetProductById();
-  console.log("product is is",product)
-  useEffect(() => {
-    getProductById(id);
-  }, [id]);
+  const { data: product,isLoading } = useGetProductById(id);
+  const {mutate:updateProductDetails}=useUpdateProductDetails()
+  
   const SetColorValue = ({ name, value }: any) => {
     const { setFieldValue } = useFormikContext();
     useEffect(() => {
@@ -60,6 +57,9 @@ const EditProduct = () => {
       onClose: close,
     });
   };
+  if(isLoading){
+  <Spin/>
+  }
 
   return (
     <>
@@ -73,7 +73,6 @@ const EditProduct = () => {
           brand: product?.data?.brand || "",
           title: product?.data?.title||"",
           imageUrl: product?.data?.imageUrl || "",
-          color: "",
           unit: product?.data?.unit||null,
           price: product?.data?.price || "",
           type: product?.data?.type||null,
@@ -166,16 +165,8 @@ const EditProduct = () => {
           }
 
           try {
-            const pujaName = values?.pujaName.map((item) => item?.value);
-            const obj = {
-              ...values,
-              type: values?.type?.value,
-              sub_type: values?.sub_type?.value,
-              unit: values?.unit?.value,
-              pujaName,
-            };
 
-            // mutate(obj);
+            updateProductDetails({productId:id,obj:values});
             resetForm();
             setSubmitting(false);
           } catch (error) {
@@ -335,8 +326,8 @@ const EditProduct = () => {
                   <p className="block font-semibold text-gray-700">
                     Available Sizes
                   </p>
-                  {sizeOptions?.map((size: any) => (
-                    <div className="flex items-center gap-2">
+                  {sizeOptions?.map((size: any,sizeIndex:any) => (
+                    <div key={sizeIndex} className="flex items-center gap-2">
                       <Field
                         type="checkbox"
                         name="availableSizes"

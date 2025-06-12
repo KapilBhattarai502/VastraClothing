@@ -19,10 +19,12 @@ const RegisterPage = () => {
         role: "",
         email: "",
         password: "",
+        mobile:""
       }}
       validationSchema={Yup.object({
         firstName: Yup.string().required("First Name is required"),
         lastName: Yup.string().required("Last Name is required"),
+        mobile: Yup.string().required("Mobile is required"),
         role: Yup.string().required("Role is required"),
         email: Yup.string()
           .email("Invalid email address")
@@ -83,6 +85,28 @@ const RegisterPage = () => {
               />
               <ErrorMessage
                 name="lastName"
+                component="div"
+                className="text-red-500 text-xs mt-1"
+              />
+            </div>
+            <div className="mb-6">
+              <label
+                htmlFor="mobile"
+                className="block text-sm font-semibold text-gray-700 mb-2"
+              >
+              Mobile Number
+              </label>
+              <Field
+                name="mobile"
+                type="text"
+                className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                  touched.mobile && errors.mobile
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
+              />
+              <ErrorMessage
+                name="mobile"
                 component="div"
                 className="text-red-500 text-xs mt-1"
               />

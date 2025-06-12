@@ -7,7 +7,7 @@ import api from "../../Config/api"
 
 const addAddress=async(address:any)=>{
 
-    return await api.post("/address/add",address)
+    return await api.post("/api/address/add",address)
     
   
 }

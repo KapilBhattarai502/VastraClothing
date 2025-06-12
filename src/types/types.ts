@@ -38,7 +38,7 @@ export interface OPTION {
     price: number;
     discountedPercent: number;
     discountedPrice: number;
-    quantity: number|null;
+    quantity: number|null|string;
     description: string;
     sizes: Size[];
     pujaName:OPTION[];
@@ -70,6 +70,7 @@ export interface OPTION {
     role:string,
     email:string,
     password:string
+    mobile:string
   }
 
   export interface PAYMENTINFO{

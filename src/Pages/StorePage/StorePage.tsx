@@ -34,10 +34,6 @@ const Store = () => {
 
   },[searchQuery,selectedType,selectedSubType])
   
-
- 
-console.log("selected Type is",selectedType)
-console.log("selected sub type is",selectedSubType)
  
 
   return (

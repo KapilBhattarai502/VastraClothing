@@ -170,13 +170,19 @@ const FunctionPage = () => {
       ([productId, quantity]) => ({
         productId,
         quantity: Number(quantity),
+      
       })
+      
     );
+
     try {
       packageProducts?.map((product) =>
         addToCart({
           productId: product?.productId,
           quantity: product?.quantity,
+          size:sizes[product?.productId],
+          color:colors[product?.productId]
+          
         })
       );
       message.success(`Added your ${category} items to cart `);

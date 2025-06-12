@@ -6,20 +6,18 @@ import { Button } from "antd";
 
 
 const ProductDetails = () => {
-  const { mutate, data, isLoading } = useGetProductById();
+  const { id } = useParams();
+  const { data, isLoading } = useGetProductById(id);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize,setSelectedSize]=useState("")
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
   const navigate=useNavigate()
-  const { id } = useParams();
+
   const handleColorClick = (colorInfo: any) => {
     setSelectedColor(colorInfo?.color);
     console.log("color is ", colorInfo);
     setSelectedImageUrl(colorInfo?.imageUrl);
   };
-  useEffect(() => {
-    mutate(id);
-  }, [id]);
 
   useEffect(()=>{
     if(data){
@@ -67,8 +65,8 @@ const ProductDetails = () => {
                   <p className=" font-semibold   opacity-65">Available Colors:</p>
                   <div className="flex gap-2 items-center cursor-pointer ">
                     {data?.data?.availableColors &&
-                      data?.data?.imageUrlColors?.map((color: any) => (
-                        <div className=" flex flex-col gap-2">
+                      data?.data?.imageUrlColors?.map((color: any,colorIndex:any) => (
+                        <div key={colorIndex} className=" flex flex-col gap-2">
                           <span className="capitalize">{color?.color}</span>
                           <div
                             className="max-w-10 border-2 "

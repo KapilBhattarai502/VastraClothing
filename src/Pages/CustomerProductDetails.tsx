@@ -7,15 +7,16 @@ import { InitialproductDetailsSize } from "../components/constants/initialValues
 import { Button, message } from "antd";
 
 const CustomerProductDetails = () => {
+  const { id } = useParams();
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
-  const { mutate, data } = useGetProductById();
-  const { id } = useParams();
+  const { data } = useGetProductById(id);
+ 
   const { mutate: addToCart } = useAddCart();
   useEffect(() => {
     window.scrollTo(0, 0);
-    mutate(id);
+
   }, [id]);
 
   const handleColorClick = (colorInfo: any) => {
@@ -53,7 +54,6 @@ const CustomerProductDetails = () => {
             quantity: 1,
             color: selectedColor,
           });
-          message.success("Added to Cart");
         } catch (error) {
           console.log("error", error);
         }
@@ -62,7 +62,6 @@ const CustomerProductDetails = () => {
       }}
     >
       {({ handleSubmit, validateForm, errors }) => {
-        console.log("error", errors);
         useEffect(() => {
           validateForm();
         }, [data, validateForm]);

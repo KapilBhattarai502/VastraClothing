@@ -35,7 +35,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  console.log("product Card ", product);
+ 
   const [selectedColor, setSelectedColor] = useState<any>("");
   const [selectedSize, setSelectedSize] = useState<any>("");
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
