@@ -1,21 +1,27 @@
-import React from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
-    
-    _id: string;
-    title: string;
-    price: number;
-    discountedPrice:number;
-    imageUrl: string;
-    description: string;
-    pujaName: string[];
-    puja_quantity:string;
-    unit:string;
-  
-  }
+  _id: string;
+  title: string;
+  price: number;
+  discountedPrice: number;
+  imageUrl: string | any;
+  description: string;
+  pujaName: string[];
+  puja_quantity: string;
+  unit: string;
+  pujaQuantities: any;
+  include_color: boolean;
+  imageUrlColors: [];
+  availableColors:[]|any;
+  availableSizes:[]|any;
+  size_based_pricing:boolean;
+  size_price:[];
+  include_size:boolean;
+}
 
 interface ProductCardProps {
   product: Product;
@@ -23,21 +29,50 @@ interface ProductCardProps {
   onQuantityChange: (productId: string, quantity: number) => void;
   isInPackage: boolean;
   quantity: number;
+  category: string;
+  size:any;
+  color:any;
+  onSizeChange:(productId: string, size: string) => void;
+  onColorChange:(productId: string, color: string) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ 
-  product, 
-  onToggleProduct, 
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  onToggleProduct,
   onQuantityChange,
-  isInPackage, 
-  quantity 
+  onSizeChange,
+  onColorChange,
+  isInPackage,
+  quantity,
+  category,
+  size:sizeProp,
+  color:colorProp
 }) => {
-  const navigate=useNavigate()
-  const handleQuantityIncrease = () => {
-    
-    onQuantityChange(product._id,Number(quantity)+1 );
-  };
+  console.log("size",sizeProp)
+  console.log("color",colorProp)
+ 
+  
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
+  const navigate = useNavigate();
 
+
+  // console.log("selected Color",colorProp)
+  // console.log("selected size",sizeProp)
+  useEffect(() => {
+    if (colorProp) {
+      const currentSelectedUrl = product?.imageUrlColors.filter(
+        (colorInfo: any) => colorInfo?.color === colorProp
+      );
+      currentSelectedUrl?.map((colorInfo: any) => {
+        setSelectedImageUrl(colorInfo?.imageUrl);
+      });
+    } else {
+      setSelectedImageUrl(product?.imageUrl);
+    }
+  }, [colorProp, product]);
+  const handleQuantityIncrease = () => {
+    onQuantityChange(product._id, Number(quantity) + 1);
+  };
   const handleQuantityDecrease = () => {
     if (quantity > 1) {
       onQuantityChange(product._id, Number(quantity) - 1);
@@ -46,35 +81,99 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer ">
-      <div className="relative" onClick={()=>navigate(`/vaidik/productpage/${product?._id}`)}>
+      <div
+        className="relative"
+        onClick={() => navigate(`/vaidik/productpage/${product?._id}`)}
+      >
         <img
-          src={product?.imageUrl}
+          src={selectedImageUrl}
           alt={product?.title}
           className="w-full h-48 object-cover"
         />
         <div className="absolute top-2 right-2">
           <span className="bg-rose-100 text-rose-800 px-2 py-1 rounded-full text-xs font-medium">
-            {product?.pujaName[0]}
+            {category}
           </span>
         </div>
       </div>
-      
+
       <div className="p-4">
         <h3 className="font-semibold text-gray-900 mb-2">{product?.title}</h3>
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
-        
+        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+          {product.description}
+        </p>
+        {product?.include_color && product?.availableColors?.length > 0 && (
+          <div className="flex gap-2">
+            <p className="text-sm text-gray-600 font-bold">Color :</p>
+            <div className="flex  items-center ">
+              {product?.availableColors?.map((color: any, colorIndex: any) => (
+                <button
+                  key={colorIndex}
+                  onClick={() =>onColorChange(product?._id,color)}
+                  className={`w-4 h-4 rounded-full border-2 transition-all ml-2 ${
+                    color === colorProp
+                      ? "border-primary ring-2 ring-primary/20"
+                      : "border-border hover:border-primary/50"
+                  }`}
+                  style={{ backgroundColor: color }}
+                  title={color.name}
+                />
+              ))}
+              
+            </div>
+          </div>
+        )}
+        {product?.include_size && product?.availableSizes?.length > 0 && (
+                <div
+                  className="flex items-center overflow-scroll over mt-2"
+                  style={{
+                    height: "40px",
+                  }}
+                >
+                 
+                  <div
+                    className="flex  items-center"
+                  >
+                     <p className="text-sm text-gray-600 font-bold">Size:</p>
+                     {product?.availableSizes?.map(
+                      (size: any, sizeIndex: any) => (
+                        <button
+                          key={sizeIndex}
+                          onClick={() => onSizeChange(product?._id,size)}
+                          className={`border transition-all ml-2 px-2 ${
+                            size === sizeProp
+                              ? "border-primary ring-2 ring-primary/20"
+                              : "border-border hover:border-primary/50"
+                          }`}
+                          title={size}
+                        >
+                          {size}
+                        </button>
+                      )
+                    )}
+
+                  </div>
+                </div>
+              )}
+
         <div className="flex items-center justify-between mb-3">
           <span className="text-xl font-bold text-rose-600">
-            <span>Rs {product?.discountedPrice}</span>
-            <span className='text-sm text-red-500'>/{product?.unit}
-            </span></span>
-          
+            <span>
+              Rs{" "}
+              {product?.size_based_pricing
+                ? product?.size_price?.find((s:any) => s.size === sizeProp)
+                    ?.price
+                : product?.price?.toLocaleString()}
+            </span>
+            <span className="text-sm text-red-500">/{product?.unit?.value}</span>
+          </span>
+
           <button
             onClick={() => onToggleProduct(product)}
             className={`flex items-center space-x-1 px-3 py-2 rounded-lg font-medium transition-colors ${
               isInPackage
-                ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                : 'bg-rose-100 text-rose-700 hover:bg-rose-200'
+                ? "bg-red-100 text-red-700 hover:bg-red-200"
+                : "bg-rose-100 text-rose-700 hover:bg-rose-200"
             }`}
           >
             {isInPackage ? (
@@ -90,7 +189,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             )}
           </button>
         </div>
-        {product?.puja_quantity && (
+        {Object?.entries(product?.pujaQuantities || {})?.length > 0 && (
           <div className="flex items-center justify-between bg-gray-50 rounded-lg p-2">
             <span className="text-sm font-medium text-gray-700">Quantity:</span>
             <div className="flex items-center space-x-2">
@@ -101,7 +200,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
               >
                 <RemoveIcon className="h-4 w-4" />
               </button>
-              <span className="font-semibold text-gray-900 min-w-[24px] text-center">{quantity}</span>
+              <span className="font-semibold text-gray-900 min-w-[24px] text-center">
+                {quantity}
+              </span>
               <button
                 onClick={handleQuantityIncrease}
                 className="w-8 h-8 rounded-full bg-rose-100 text-rose-600 hover:bg-rose-200 flex items-center justify-center"
@@ -110,9 +211,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </button>
             </div>
           </div>
-        )}  
-
-       
+        )}
       </div>
     </div>
   );

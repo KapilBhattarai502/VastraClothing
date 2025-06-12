@@ -23,6 +23,7 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   onClose 
 }) => {
   if (!isOpen || !order) return null;
+  console.log("order is",order)
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -86,7 +87,7 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Total Amount:</span>
-                      <span className="text-gray-900 font-medium">Rs{order.totalDisountedPrice?.toFixed(2)}</span>
+                      <span className="text-gray-900 font-medium">Rs{order?.totalPrice?.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
@@ -123,8 +124,16 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                         Quantity
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        Size
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        Color
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                         Price
                       </th>
+                      
+                      
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                         Total
                       </th>
@@ -134,21 +143,25 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                     {order.orderItems?.map((item, index) => (
                       <tr key={index}>
                         <td className="px-4 py-3 text-sm text-gray-900">{item?.product?.title}</td>
-                        <td className="px-4 py-3 text-sm text-gray-600">{item.quantity}</td>
-                        <td className="px-4 py-3 text-sm text-gray-600">Rs {item.discountedPrice.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-sm text-gray-600">{item?.quantity}</td>
+                        <td className="px-4 py-3 text-sm text-gray-600">{item?.size ? item?.size : "-"}</td>
+                        <td className="px-4 py-3 text-sm text-gray-600">{item?.color ? item?.color : "-"}</td>
+
+                        <td className="px-4 py-3 text-sm text-gray-600">Rs {item?.price?.toFixed(2)}</td>
+
                         <td className="px-4 py-3 text-sm font-medium text-gray-900">
-                          Rs {(item.quantity * item.discountedPrice).toFixed(2)}
+                          Rs {(item.quantity * item?.price).toFixed(2)}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                   <tfoot className="bg-gray-50">
                     <tr>
-                      <td colSpan={3} className="px-4 py-3 text-sm font-medium text-gray-900 text-right">
+                      <td colSpan={5} className="px-4 py-3 text-sm font-medium text-gray-900 text-right">
                         Total:
                       </td>
                       <td className="px-4 py-3 text-sm font-bold text-gray-900">
-                        Rs {order?.totalDisountedPrice?.toFixed(2)}
+                        Rs {order?.totalPrice?.toFixed(2)}
                       </td>
                     </tr>
                   </tfoot>

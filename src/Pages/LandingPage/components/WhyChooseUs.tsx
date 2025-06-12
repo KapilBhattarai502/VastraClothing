@@ -73,7 +73,7 @@ export const WhyChooseUs = () => {
             </p>
             <div className="flex justify-center items-center space-x-8 text-sm font-lora">
               <div className="text-center transform hover:scale-110 transition-transform duration-300">
-                <div className="text-2xl font-bold animate-[count-up_2s_ease-out]">500+</div>
+                <div className="text-2xl font-bold animate-[count-up_2s_ease-out]">2500+</div>
                 <div className="opacity-80">Sacred Items</div>
               </div>
               <div className="text-center transform hover:scale-110 transition-transform duration-300">
@@ -81,7 +81,7 @@ export const WhyChooseUs = () => {
                 <div className="opacity-80">Happy Devotees</div>
               </div>
               <div className="text-center transform hover:scale-110 transition-transform duration-300">
-                <div className="text-2xl font-bold animate-[count-up_2s_ease-out_0.4s_both]">25+</div>
+                <div className="text-2xl font-bold animate-[count-up_2s_ease-out_0.4s_both]">15+</div>
                 <div className="opacity-80">Years Experience</div>
               </div>
             </div>

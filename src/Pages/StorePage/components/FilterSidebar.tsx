@@ -66,7 +66,7 @@ const FilterSidebar = ({
             >
               All Categories
             </Button>
-            {uniqueSubTypes?.map((subType) => (
+            {uniqueSubTypes?.map((subType:any) => (
               <Button
                 key={subType?.value}
                 variant={selectedSubType === subType?.value ? 'default' : 'ghost'}
@@ -86,8 +86,8 @@ const FilterSidebar = ({
           variant="outline"
           className="w-full"
           onClick={() => {
-            onTypeChange('all');
-            onSubTypeChange('all');
+            onTypeChange('');
+            onSubTypeChange('');
           }}
         >
           Clear Filters

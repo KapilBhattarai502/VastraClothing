@@ -15,15 +15,19 @@ import {
   Row,
   Select,
   Space,
+  message,
 } from "antd";
 import AddModal from "./AddModal";
 import { useGetAddress } from "../../hooks/Get/useGetAddress";
+import { useUpdateCurrentAddress } from "../../hooks/Put/useUpdateCurrentAddress";
 
 const { Option } = Select;
 
 const AddressDrawer: React.FC = ({ open, setOpen }: any) => {
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [userSelectedAddress,setUserSelectedAddress]=useState(null)
   const { data: userAddress } = useGetAddress();
+  const {mutate:updateCurrentAddress}=useUpdateCurrentAddress()
 
   const showDrawer = () => {
     setOpen(true);
@@ -35,6 +39,20 @@ const AddressDrawer: React.FC = ({ open, setOpen }: any) => {
   const toggleAddModal = () => {
     setOpenAddModal((prev) => !prev);
   };
+  const handleNewAddress=(address:any)=>{
+    setUserSelectedAddress(address)
+    
+  }
+  const updateUserCurrentAddress =()=>{
+    if(userSelectedAddress){
+      updateCurrentAddress(userSelectedAddress)
+    }
+    else {
+      message.warning("please select a address")
+    }
+    
+
+  }
 
   return (
     <>
@@ -63,7 +81,7 @@ const AddressDrawer: React.FC = ({ open, setOpen }: any) => {
           <div>
             {userAddress?.data?.userAddress?.map((address: any) => (
               <div className="border px-1 py-1 mb-4">
-                <input type="radio" name="address" />
+                <input type="radio" name="address" onChange={()=>handleNewAddress(address)}/>
                 <div key={address._id} className=" mb-4 pt-2 pb-6 px-2">
                   <div className="flex gap-3">
                     <p>{address.firstName} </p>
@@ -84,7 +102,7 @@ const AddressDrawer: React.FC = ({ open, setOpen }: any) => {
             ))}
             <div className="flex gap-2 justify-end">
               <Button icon={<CloseOutlined />}>Cancel</Button>
-              <Button type="primary" icon={<UploadOutlined />}>
+              <Button type="primary" icon={<UploadOutlined />} onClick={updateUserCurrentAddress} >
                 Save
               </Button>
             </div>

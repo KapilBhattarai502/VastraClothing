@@ -1,12 +1,14 @@
 import { message } from "antd"
-import axios from "axios"
 import { useQuery } from "react-query"
+import api from "../../Config/api"
 
 const QUERYKEY = 'getProducts'
 
 
 const getProducts:any=async({pageNumber,search,type,sub_type}:any)=>{
-    const {data}= await axios.get(`http://localhost:6464/api/products?pageNumber=${pageNumber}&search=${search}&type=${type}&sub_type=${sub_type}`)
+    console.log("type is",type)
+    console.log("sub type is",sub_type)
+    const {data}= await api.get(`/api/products?pageNumber=${pageNumber}&search=${search}&type=${type}&sub_type=${sub_type}`)
     return data
 }
 

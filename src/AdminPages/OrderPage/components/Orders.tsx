@@ -10,6 +10,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import { useGetAllOrder } from '../../../hooks/Get/useGetAllOrder';
 import moment from "moment"
+import { useUpdateOrderStatus } from '../../../hooks/Put/useUpdateOrderStatus';
 
 
 
@@ -22,6 +23,9 @@ const Orders = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const {data:orders}=useGetAllOrder()
+  const {mutate:changeOrderStatus} = useUpdateOrderStatus()
+
+  console.log("orders is",orders)
 
 
  
@@ -38,13 +42,16 @@ const Orders = () => {
 //     return matchesSearch && matchesStatus;
 //   });
 
-//   const handleStatusChange = (orderId, newStatus) => {
-//     setOrders(prevOrders =>
-//       prevOrders.map(order =>
-//         order.id === orderId ? { ...order, status: newStatus } : order
-//       )
-//     );
-//   };
+  const handleStatusChange =(orderId:any, newStatus:any) => {
+  
+     changeOrderStatus({order_id:orderId,order_status:newStatus})
+
+    // setOrders(prevOrders =>
+    //   prevOrders.map(order =>
+    //     order.id === orderId ? { ...order, status: newStatus } : order
+    //   )
+    // );
+  };
 
   const handleViewOrder = (order) => {
     setSelectedOrder(order);
@@ -82,6 +89,7 @@ const Orders = () => {
               </div>
             </div>
           </div>
+          
 
           {/* Filters and Search */}
           <div className="bg-white p-6 rounded-lg shadow-sm border mb-6">
@@ -176,7 +184,7 @@ const Orders = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">Rs {order.totalDisountedPrice?.toFixed(2)}</div>
+                      <div className="text-sm font-medium text-gray-900">Rs {order?.totalPrice}</div>
                       <div className="text-sm text-gray-500">{order.orderItems?.length} items</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -187,7 +195,7 @@ const Orders = () => {
                         
                         <StatusChangeDropdown
                           currentStatus={order?.orderStatus}
-                          onStatusChange={(newStatus) => handleStatusChange(order.id, newStatus)}
+                          onStatusChange={(newStatus) => handleStatusChange(order._id, newStatus)}
                         />
                         <button
                           onClick={() => handleViewOrder(order)}

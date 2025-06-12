@@ -2,18 +2,18 @@ import { message } from "antd"
 import { useQuery } from "react-query"
 import api from "../../Config/api"
 
-const QUERYKEY = 'getFashionItems'
+const QUERYKEY = 'getProductsColor'
 
 
-const getFunctionProducts=async(category:any)=>{
-    const response= await api.get(`/api/bratabandha/items?category=${category}`)
-    return response?.data
+const getProductColor=async()=>{
+    const { data } = await api.get("api/product/colors/get");
+    return Array.isArray(data?.[0]?.colors) ? data[0].colors : [];
 }
 
 
-export const useGetFashionItems=(category:any)=>{
+export const useGetProductColors=()=>{
 
-    return useQuery([QUERYKEY,category],()=>getFunctionProducts(category),
+    return useQuery([QUERYKEY],getProductColor,
         { 
             onSuccess:()=>{
                 console.log('Successfully fetched data');

@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Download, ShoppingCart } from "lucide-react";
-// import Navbar from '../components/Navbar';
-// import SearchBar from '../components/SearchBar';
 import ProductCard from "./components/ProductCard";
-import { useParams, useSearchParams } from "react-router-dom";
-import { Input, Space, message } from "antd";
+import { useSearchParams } from "react-router-dom";
+import { Input, message } from "antd";
 import type { GetProps } from "antd";
-
 import { useGetFashionItems } from "../../hooks/Get/useGetFashionItems";
-import { Category } from "@mui/icons-material";
 import { useAddCart } from "../../hooks/Post/useAddCart";
+import { checkLogin } from "../../Config/checkLogin";
 
 type SearchProps = GetProps<typeof Input.Search>;
 
@@ -19,59 +16,89 @@ interface Product {
   _id: string;
   title: string;
   price: number;
-  discountedPrice:number;
+  discountedPrice: number;
   imageUrl: string;
   description: string;
   pujaName: string[];
-  puja_quantity:string;
-  unit:string;
+  puja_quantity: string;
+  unit: any;
+  pujaQuantities: any;
 }
 
 interface ProductQuantity {
-  [productId: string|number]: number;
+  [productId: string | number]: number;
 }
 
 const FunctionPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedProducts, setSelectedProducts] = useState<Set<string|unknown>>(
-    new Set()
-  );
-  const [quantities, setQuantities] = useState<any>({});
   const [params] = useSearchParams();
-  const category =params.get("category")
-  const {data:Products}=useGetFashionItems(category)
-  const {mutate:addToCart}=useAddCart()
+  const category: any = params.get("category");
+  const [selectedProducts, setSelectedProducts] = useState<
+    Set<string | unknown>
+  >(new Set());
+  const [quantities, setQuantities] = useState<any>({});
+  const [sizes, setSizes] = useState<any>({});
+  const [colors, setColors] = useState<any>({});
 
-
-
+  const { data: Products } = useGetFashionItems(category);
+  const { mutate: addToCart } = useAddCart();
 
   const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
     console.log(info?.source, value);
 
-
-
   // Initialize selected products with default package items and default quantities
-  React.useEffect(() => {
-    const defaultSelected = new Set(
-      Products
-        ?.filter((product:any) => product?.pujaName.includes(category))
-        ?.map((product:any) => product._id)
-    );
-    setSelectedProducts(defaultSelected);
 
-
-
-
-    // Initialize quantities for default selected items
-    const defaultQuantities: any = {};
-
-    Products?.forEach((product:any) => {
-      if (product) {
-        defaultQuantities[product._id] = product?.puja_quantity;
-      }
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "auto",
     });
-    setQuantities(defaultQuantities);
-  }, [Products]);
+  }, []);
+  React.useEffect(() => {
+    // Only run this effect if we have a valid category
+    if (category) {
+      const defaultSelected = new Set(
+        Products?.filter((product: any) => product?.pujaQuantities)?.map(
+          (product: any) => product._id
+        )
+      );
+      setSelectedProducts(defaultSelected);
+
+      // Initialize quantities for default selected items
+      const defaultQuantities: any = {};
+      const defaultSizes:any = {};
+      const defaultColors:any={};
+
+      Products?.forEach((product: any) => {
+        if (product && product.pujaQuantities) {
+          // Access the quantity for the current category
+          defaultQuantities[product._id] = product.pujaQuantities[category];
+        }
+        if (product?.include_size && product?.include_color){
+          defaultSizes[product._id] = product?.availableSizes[0];
+          defaultColors[product._id]= product?.availableColors[0];
+
+        }
+        else if(product?.include_size){
+          defaultSizes[product._id] = product?.availableSizes[0];
+          
+
+        }
+        else if(product?.include_color){
+          defaultColors[product._id] = product?.availableColors[0];
+
+        }
+      });
+      setQuantities(defaultQuantities);
+      setSizes(defaultSizes)
+      setColors(defaultColors)
+      
+
+      
+
+     
+    }
+  }, [Products, category]); // Make sure category is in the dependency array
 
   const filteredProducts = Products?.filter(
     (product) =>
@@ -89,7 +116,7 @@ const FunctionPage = () => {
       delete newQuantities[product?._id];
     } else {
       newSelected.add(product?._id);
-      newQuantities[product?._id] = product?.puja_quantity;
+      newQuantities[product?._id] = product?.pujaQuantities[category];
     }
 
     setSelectedProducts(newSelected);
@@ -97,49 +124,63 @@ const FunctionPage = () => {
   };
 
   const handleQuantityChange = (productId: string, quantity: number) => {
-  
-    setQuantities((prev:any) => ({
+    setQuantities((prev: any) => ({
       ...prev,
       [productId]: quantity,
     }));
   };
+  const handleSizeChange = (productId: string, size: string) => {
+    setSizes((prev: any) => ({
+      ...prev,
+      [productId]: size,
+    }));
+  };
 
-  const selectedProductsList = Products?.filter((product:any) =>
+  const handleColorChange = (productId: string, color: string) => {
+    setColors((prev: any) => ({
+      ...prev,
+      [productId]: color,
+    }));
+  };
+
+
+  const selectedProductsList = Products?.filter((product: any) =>
     selectedProducts.has(product._id)
   );
 
-  const totalPrice = selectedProductsList?.reduce((sum, product) => {
+  const totalPrice = selectedProductsList?.reduce((sum:any, product:any) => {
     const quantity = quantities[product._id] || 1;
-    return sum + product?.discountedPrice * quantity;
+    const price = Number(product?.size_based_pricing
+    ? product?.size_price?.find((s:any) => s.size === sizes[product?._id])?.price
+     : product?.price)
+    return sum +price * quantity;
   }, 0);
 
   const totalItems = Object.values(quantities).reduce(
-    (sum, quantity) => sum + Number(quantity) ,
+    (sum:any, quantity) => sum + Number(quantity),
     0
   );
 
-
   const handleDownloadPDF = () => {
-    
     alert("PDF download functionality would be implemented here");
   };
 
   const handleAddToCart = () => {
-  
-    const packageProducts = Object.entries(quantities).map(([productId, quantity]) => ({
-      productId,
-      quantity: Number(quantity),
-    }))
+    const packageProducts = Object.entries(quantities).map(
+      ([productId, quantity]) => ({
+        productId,
+        quantity: Number(quantity),
+      })
+    );
     try {
-      packageProducts?.map((product)=>addToCart({productId:product?.productId,quantity:product?.quantity}))
-      message.success(`Added your ${category} items to cart `)
-      
-    } catch (error) {
-
-      
-    }
-   
-   
+      packageProducts?.map((product) =>
+        addToCart({
+          productId: product?.productId,
+          quantity: product?.quantity,
+        })
+      );
+      message.success(`Added your ${category} items to cart `);
+    } catch (error) {}
   };
 
   return (
@@ -190,7 +231,9 @@ const FunctionPage = () => {
             <div className="text-sm text-gray-600 ">
               Selected Items: {totalItems}
             </div>
-            <div className="font-bold text-rose-600">Total: Rs {totalPrice}</div>
+            <div className="font-bold text-rose-600">
+              Total: Rs {totalPrice}
+            </div>
           </div>
         </div>
 
@@ -209,14 +252,19 @@ const FunctionPage = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts?.map((product:any) => (
+          {filteredProducts?.map((product: any) => (
             <ProductCard
               key={product._id}
               product={product}
               onToggleProduct={handleToggleProduct}
+              onSizeChange={handleSizeChange}
+              onColorChange={handleColorChange}
               onQuantityChange={handleQuantityChange}
               isInPackage={selectedProducts.has(product._id)}
               quantity={quantities[product._id] || 1}
+              size={sizes[product?._id]}
+              color={colors[product?._id]}
+              category={category}
             />
           ))}
         </div>

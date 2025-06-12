@@ -4,6 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDeleteCartItem } from '../hooks/Delete/useDeleteCartItem';
 import { useUpdateCartItem } from '../hooks/Post/useUpdateCartItem';
 import { useNavigate } from 'react-router-dom';
+import { message } from 'antd';
 
 const Cart = () => {
   const navigate=useNavigate()
@@ -28,8 +29,15 @@ const Cart = () => {
 
    }
    const handleCheckout=()=>{
-    navigate("/vaidik/address")
+    if(data?.data.cartItems.length > 0 ){
+      {navigate("/vaidik/address")}
+    
    }
+   else {
+    message.warning("Please select some items to checkout")
+    navigate("/vaidik/store")
+   }
+  }
   return (
     <div className="mt-20">
       <div className="h-[400px] bg-slate-600 flex  items-center justify-center ">
@@ -49,20 +57,19 @@ const Cart = () => {
                 <div className="flex gap-4 justify-between">
                   <div className="h-[140px] w-[110px]">
                     <img
-                      src={item.product.imageUrl}
-                      className="object-cover w-full h-full"
+                      src={item?.product?.include_color ? item?.product?.imageUrlColors?.find((colorInfo)=>colorInfo?.color===item?.color)?.imageUrl:item?.product?.imageUrl}
+                      className="object-contain w-full h-full"
                     />
                   </div>
                   <div className="flex items-center gap-10">
                     <div>
                       <h1 className=" opacity-75 font-semibold">
-                        {item.title}
+                        {item?.product?.title}
                       </h1>
-                      <h3 className=" line-through font-thin">
-                        Rs {item.price}
+                      <h3 className="font-light">
+                        Rs {item?.product?.size_based_pricing ? item?.product?.size_price.find((sizeInfo:any)=>sizeInfo?.size===item?.size)?.price:item?.product?.price}
                       </h3>
-                      <h2>Rs {item.discountedPrice}</h2>
-                      <p className=" font-light">color:{item.color}</p>
+                      <p className="font-light"> {item?.color ? <p>Color:{item?.color}</p> : ""} </p>
                       {item.size ? <p>size:{item.size}</p> : ""} 
                     </div>
                     <div className="flex gap-2 border border-slate-500 px-2">
@@ -98,7 +105,7 @@ const Cart = () => {
                 </div>
                 <div className="flex flex-row-reverse">
                   <p className="mt-6 opacity-75 font-semibold">
-                    Total Price: {item.quantity * item.discountedPrice}
+                    Total Price: {item.quantity * (item?.product?.size_based_pricing ? item?.product?.size_price.find((sizeInfo:any)=>sizeInfo?.size===item?.size)?.price:item?.product?.price)}
                   </p>
                 </div>
               </div>
@@ -124,7 +131,7 @@ const Cart = () => {
           <hr />
           <div className="flex justify-between items-center my-4">
             <p>Total</p>
-            <p>Rs {data?.data.totalDiscountedPrice}</p>
+            <p>Rs {data?.data.totalPrice}</p>
           </div>
           <hr />
           <button className="w-full text-center bg-slate-900 text-white py-2 mt-8" onClick={handleCheckout}>
@@ -137,52 +144,3 @@ const Cart = () => {
 }
 
 export default Cart
-
-//   const [state, dispatch] = useReducer(handleQuantity, initialState);
-
-// import AddCircleIcon from "@mui/icons-material/AddCircle";
-// import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-
-// interface QuantityState {
-//   quantity: number;
-// }
-
-// interface QuantityAction {
-//   type: "increasequantity" | "decreasequantity";
-// }
-
-// const initialState: QuantityState = {
-//   quantity: 1,
-// };
-
-// function handleQuantity(state: QuantityState, action: QuantityAction): QuantityState {
-//   switch (action.type) {
-//     case "increasequantity":
-//       return { ...state, quantity: state.quantity + 1 };
-//     case "decreasequantity":
-//       return { ...state, quantity: state.quantity - 1 };
-//     default:
-//       return state;
-//   }
-// }
-
-{/* <button
-                  disabled={state.quantity === 1}
-                  onClick={() => {
-                    dispatch({ type: "decreasequantity" });
-                  }}
-                >
-                  <RemoveCircleIcon
-                    sx={state.quantity === 1 ? { color: "#bbb7b6" } : null}
-                  /> */}
-                {/* </button> */}
-
-
-
-                {/* <button
-                  onClick={() => {
-                    dispatch({ type: "increasequantity" });
-                  }}
-                >
-                  <AddCircleIcon /> */}
-                {/* </button> */}

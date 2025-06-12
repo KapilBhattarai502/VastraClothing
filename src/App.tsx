@@ -1,5 +1,4 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Homepage from "./Pages/Homepage";
 import Loginpage from "./Pages/Loginpage";
 import ProtectedRoute from "./RouteProtection/ProtectedRoute";
 import AdminLayout from "./Layouts/AdminLayout";
@@ -16,8 +15,6 @@ import CustomerProductDetails from "./Pages/CustomerProductDetails";
 import Cart from "./Pages/Cart";
 import AddressPage from "./Pages/AddressPage/AddressPage";
 import EsewaErrorPage from "./components/e-sewaIntegration/pages/EsewaErrorPage";
-import Bratabandha from "./Pages/Bratabandha";
-import EsewaProtectedRoute from "./RouteProtection/EsewaProtectedRoute";
 import EsewaSuccesPage from "./components/e-sewaIntegration/pages/EsewaSuccesPage";
 import PaymentPage from "./Pages/PaymentPage/PaymentPage";
 import UserOrderPage from "./Pages/OrderPage/UserOrderPage";
@@ -26,16 +23,14 @@ import FunctionPage from "./Pages/FunctionPage/FunctionPage";
 import LandingPage from "./Pages/LandingPage/index";
 import AddProperties from "./AdminPages/AddProperties";
 import OrderPage from "./AdminPages/OrderPage/OrderPage";
-import Marriage from "./Pages/FunctionPage/Marriage";
+import EditProduct from "./AdminPages/EditProduct";
 
 const App = () => {
   return (
     <>
-      <BrowserRouter
-      
-      >
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="vaidik/landingpage"/>} />
+          <Route path="/" element={<Navigate to="vaidik/store" />} />
           <Route path="/login" element={<Loginpage />} />
           <Route
             path="/admin"
@@ -51,10 +46,10 @@ const App = () => {
             <Route path="addproduct" element={<Createproduct />} />
             <Route path="addproperties" element={<AddProperties />} />
             <Route path="orders" element={<OrderPage />} />
+            <Route path="edit/:id" element={<EditProduct />} />
             <Route path="productpage/:id" element={<ProductDetails />} />
             <Route path="logout" element={<Logout />} />
           </Route>
-
           <Route
             path="vaidik"
             element={
@@ -66,7 +61,6 @@ const App = () => {
             <Route index element={<Navigate to="landingpage" replace />} />
             <Route path="landingpage" element={<LandingPage />} />
             <Route path="kurtha" element={<MenFashion />} />
-
             <Route path="payment" element={<PaymentPage />} />
             <Route
               path="productpage/:id"
@@ -78,15 +72,10 @@ const App = () => {
             <Route path="user/orders" element={<UserOrderPage />} />
             <Route path="store" element={<StorePage />} />
             <Route path="functions" element={<FunctionPage />} />
+            <Route path="esewa/success" element={<EsewaSuccesPage />} />
+            <Route path="esewa/error" element={<EsewaErrorPage />} />
           </Route>
-          {/* <Route path="esewa" element={
-            <EsewaProtectedRoute>
-            </EsewaProtectedRoute>
-          }> */}
-          {/* <Route index element={<Navigate to="success" replace/>}/> */}
-          <Route path="esewa/success" element={<EsewaSuccesPage />} />
-          <Route path="esewa/error" element={<EsewaErrorPage />} />
-          {/* </Route> */}
+
           <Route path="/register" element={<Registerpage />} />
         </Routes>
       </BrowserRouter>

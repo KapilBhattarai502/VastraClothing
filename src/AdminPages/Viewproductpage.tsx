@@ -20,7 +20,7 @@ interface Iproduct extends FormValues{
 const Viewproductpage = () => {
     const [pageNumber,setPageNumber]=useState(1)
     const dispatch=useDispatch()
-    const { isLoading, isError, data } = useGetProduct(pageNumber);
+    const { isLoading, isError, data } = useGetProduct({pageNumber,type:"",sub_type:"",search:""});
     useEffect(()=>{
         dispatch(manageSearchRequirement(true))
 
@@ -49,7 +49,7 @@ const Viewproductpage = () => {
             items={[{ title: "Vaidik" }, { title: "Products" }]}
           />
            
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
             {data?.content.map((product:Iproduct ) => (
                 <FashionCard key={product._id} product={product} />
             ))}

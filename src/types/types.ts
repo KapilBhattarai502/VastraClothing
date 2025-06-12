@@ -38,12 +38,30 @@ export interface OPTION {
     price: number;
     discountedPercent: number;
     discountedPrice: number;
-    quantity: number;
+    quantity: number|null;
     description: string;
     sizes: Size[];
     pujaName:OPTION[];
-    puja_quantity:Number,
-    unit:String
+    puja_quantity:Number;
+    unit:String|null;
+    pujaQuantities:{};
+    type:String|null;
+    sub_type:String|null;
+    availableSizes: [];
+    imageUrlColors: [];
+    quantitySizeAndColors: []|any;
+    quantitySizes:[];
+    quantityColors:[];
+    availableColors: [];
+    hex:String;
+    size_price:[];
+    size_based_pricing:boolean;
+    include_size:boolean;
+    include_color:boolean;
+    
+    
+
+
   }
 
   export interface NEWUSER{

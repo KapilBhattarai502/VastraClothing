@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
 
 
 export const Hero = () => {
+  const navigate=useNavigate()
   return (
     <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -34,6 +36,7 @@ export const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-[fade-in_1.8s_ease-out]">
             <Button 
               className="bg-saffron-600 hover:bg-saffron-700 text-white px-8 py-4 text-lg font-lora rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
+              onClick={()=>navigate("/vaidik/store")}
             >
               Explore Sacred Collection
             </Button>

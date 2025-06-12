@@ -4,9 +4,9 @@ import { message } from "antd"
 import { useNavigate } from "react-router-dom"
 
 
-const addtocart=async({productId,size,quantity}:any)=>{
+const addtocart=async({productId,size,quantity,color}:any)=>{
 
-    return await api.put('/api/cart/add',{productId,size,quantity})
+    return await api.post('/api/cart/add',{productId,size,quantity,color})
 }
 
 

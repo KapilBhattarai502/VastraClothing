@@ -4,7 +4,7 @@ import { Card, CardContent } from "../../../components/ui/card";
 export const Testimonials = () => {
   const testimonials = [
     {
-      name: "Priya Sharma",
+      name: "Gaju Kharel",
       location: "Kathmandu",
       text: "Vaidik has been our family's trusted source for all puja samagri for over 10 years. The quality and authenticity of their products is unmatched.",
       ceremony: "Weekly Puja"
@@ -22,8 +22,8 @@ export const Testimonials = () => {
       ceremony: "Antim Sanskar"
     },
     {
-      name: "Mohan Acharya",
-      location: "Bhaktapur",
+      name: "Ishwari Kandel",
+      location: "London",
       text: "As a pandit, I recommend Vaidik to all devotees. Their products maintain the spiritual purity required for effective rituals.",
       ceremony: "Professional Pandit"
     }

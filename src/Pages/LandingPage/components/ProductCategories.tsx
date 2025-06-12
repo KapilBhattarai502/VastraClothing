@@ -1,9 +1,11 @@
 
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 
 
 export const ProductCategories = () => {
+  const navigate=useNavigate()
   const categories = [
     {
       title: "Birth & Naming Ceremony",
@@ -66,6 +68,7 @@ export const ProductCategories = () => {
               key={index} 
               className={`relative overflow-hidden bg-gradient-to-br ${category.color} border-saffron-200 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 animate-[fade-in_0.6s_ease-out] group`}
               style={{animationDelay: `${index * 0.1}s`}}
+              onClick={()=>navigate("/vaidik/functions?category=bratabandha")}
             >
               <CardHeader className="text-center pb-4">
                 <div className="text-4xl mb-4 transform group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300">{category.icon}</div>

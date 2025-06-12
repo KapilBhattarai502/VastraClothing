@@ -7,6 +7,7 @@ import {
 } from "../../components/commonStyle/wrapper/OutletWrapper";
 import { Input } from "antd";
 import type { GetProps } from "antd";
+import { OrderStatusBadge } from "../../AdminPages/OrderPage/components/OrderStatusBadge";
 
 type SearchProps = GetProps<typeof Input.Search>;
 const UserOrderPage = () => {
@@ -38,11 +39,11 @@ const UserOrderPage = () => {
 
               <div key={userOrderInfo?._id}>
                 <div className="shadow-lg px-6 py-3 rounded-md overflow-y-auto mb-4 bg-white mt-4">
-                  <div className="flex justify-between cursor-pointer">
+                  <div className="flex justify-between cursor-pointer items-center">
                     <p>Your Orders and Shipping Address of  {moment(userOrderInfo?.orderDate).format('MMMM Do YYYY, h:mm:ss a')}</p>
                     <div className="flex gap-2 text-sm items-center">
                       <p>Order Status:</p>
-                      <p className=" bg-green-300 px-3 py-1 rounded-md">Confirmed</p>
+                     <OrderStatusBadge status={userOrderInfo?.orderStatus}/>
                     </div>
                   </div>
                 </div>
@@ -86,7 +87,7 @@ const UserOrderPage = () => {
                         <div className="max-w-20">
                           <img
                             className=" object-cover"
-                            src={userOrder?.product?.imageUrl}
+                            src={userOrder?.product?.include_color ? userOrder?.product?.imageUrlColors?.find((colorInfo)=>colorInfo?.color===userOrder?.color)?.imageUrl:userOrder?.product?.imageUrl}
                             alt="your order"
                           />
                         </div>
@@ -94,7 +95,7 @@ const UserOrderPage = () => {
                         <p>{userOrder?.product?.title}</p>
                       </div>
 
-                      <p>Rs.{userOrder?.product?.discountedPrice}</p>
+                      <p>Rs.{userOrder?.product?.size_based_pricing ? userOrder?.product?.size_price.find((sizeInfo:any)=>sizeInfo?.size===userOrder?.size)?.price:userOrder?.product?.price}</p>
                       <p>Qty:{userOrder?.quantity}</p>
                     </div>
                   </div>

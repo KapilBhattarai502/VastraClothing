@@ -38,14 +38,8 @@ const handleLogOut = () => {
           {/* Left Navigation */}
           <div className="flex items-center space-x-8">
             <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <Button variant="ghost" className="text-gray-700 hover:text-blue-600" onClick={()=>navigate("/vaidik/kurtha")}>
-                    Kurtha
-                  </Button>
-                </NavigationMenuItem>
-                
-                <NavigationMenuItem>
+              <NavigationMenuList>    
+             <NavigationMenuItem>
                   <Button variant="ghost" className="text-gray-700 hover:text-blue-600" onClick={()=>navigate("/vaidik/store")}>
                     Our Store
                   </Button>

@@ -13,10 +13,13 @@ const CustomerProtectedRoute = ({children}:any) => {
             navigate("/login")
 
         }
+        if(validUser && role === "admin"){
+          navigate("/admin/dashboard")
+        }
     },[])
   return (
     <>
-    {validUser  ? children :null }
+    {validUser && role === "customer"? children :null }
     </>
   )
 }

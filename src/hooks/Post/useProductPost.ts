@@ -1,26 +1,34 @@
 
 import {  useMutation, useQueryClient } from "react-query"
-import { FormValues } from "../../types/types"
 import { message } from "antd"
 import api from "../../Config/api"
 
 
 
-const createProduct=async(product:FormValues)=>{
+const createProduct=async(obj:any)=>{
 
-    return await api.post("/api/admin/products",product)
+   const response = await api.post("/api/admin/products",obj)
+
+  
+   
+
+  
+
+   return response
     
   
 }
 
 export const useProductPost=()=>{
     const queryClient=useQueryClient()
+    
 
 
 
     return useMutation(createProduct,{
         onSuccess:({data})=>{
             queryClient.invalidateQueries('getProducts');
+
             message.success("Product Created Successfully")
             
 

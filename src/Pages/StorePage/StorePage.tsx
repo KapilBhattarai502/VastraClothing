@@ -1,15 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { Input } from '../../components/ui/input';
 import FilterSidebar from './components/FilterSidebar';
@@ -37,10 +26,18 @@ const Store = () => {
     setCurrentPage(page);
   };
   
+  useEffect(()=>{
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto',
+    });
+
+  },[searchQuery,selectedType,selectedSubType])
   
 
  
-
+console.log("selected Type is",selectedType)
+console.log("selected sub type is",selectedSubType)
  
 
   return (

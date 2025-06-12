@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
 
 
 export const CallToAction = () => {
+  const navigate=useNavigate()
   return (
     <section className="py-20 bg-gradient-to-r from-saffron-600 via-sandalwood-700 to-saffron-800 text-white relative overflow-hidden">
       {/* Animated background elements */}
@@ -43,6 +45,7 @@ export const CallToAction = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-[fade-in_1s_ease-out_0.6s_both]">
           <Button 
             className="bg-white text-saffron-700 hover:bg-sacred-cream px-8 py-4 text-lg font-lora rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
+            onClick={()=>navigate("/vaidik/store")}
           >
             Shop Sacred Collection
           </Button>

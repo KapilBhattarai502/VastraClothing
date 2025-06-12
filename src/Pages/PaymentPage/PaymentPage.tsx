@@ -27,14 +27,14 @@ const PaymentPage = () => {
         const product_delivery_charge="0"
         const product_service_charge= "0"
         const esewa_data: any = {
-          failure_url: "http://localhost:5173/esewa/error",
+          failure_url: "http://localhost:5173/vaidik/esewa/error",
           amount: totalAmount,
           product_delivery_charge,
           product_service_charge,
           product_code: "EPAYTEST",
           signature,
           signed_field_names: "total_amount,transaction_uuid,product_code",
-          success_url: "http://localhost:5173/esewa/success",
+          success_url: "http://localhost:5173/vaidik/esewa/success",
           tax_amount,
           total_amount: totalAmount,
           transaction_uuid:transaction_uuid,

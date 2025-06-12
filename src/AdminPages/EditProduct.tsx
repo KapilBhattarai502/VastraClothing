@@ -1,44 +1,52 @@
-import {
-  Formik,
-  Form,
-  Field,
-  FieldArray,
-  ErrorMessage,
-  useFormikContext,
-} from "formik";
+import { Formik, Field, Form, ErrorMessage, FieldArray, useFormikContext } from "formik";
 import * as Yup from "yup";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { FormValues } from "../types/types";
-import { useProductPost } from "../hooks/Post/useProductPost";
-import { Breadcrumb, Button, Space, message } from "antd";
+import { Breadcrumb, message } from "antd";
 import { useGetUnit } from "../hooks/Get/useGetUnit";
 import { useGetPujaName } from "../hooks/Get/useGetPujaName";
 import { useGetPujaType } from "../hooks/Get/useGetPujaType";
 import { useGetPujaSubType } from "../hooks/Get/useGetPujaSubType";
+import { useGetProductById } from "../hooks/Get/useGetProductById";
 import { useEffect, useMemo, useState } from "react";
-import { useGetProductSizes } from "../hooks/Get/useGetProductSize";
-import { useGetProductColors } from "../hooks/Get/useGetProductColor";
+import { useParams } from "react-router-dom";
 import { notification } from "antd";
 import { WarningOutlined } from "@ant-design/icons";
+import { useGetProductSizes } from "../hooks/Get/useGetProductSize";
+import { useGetProductColors } from "../hooks/Get/useGetProductColor";
 
 const animatedComponents = makeAnimated();
 
 const close = () => {
+  console.log(
+    "Notification was closed. Either the close button was clicked or duration time elapsed."
+  );
 };
 
-const CreateProduct = () => {
-  const { mutate } = useProductPost();
-
+const EditProduct = () => {
+  const [submitting,setSubmitting]=useState(false)
   const [api, contextHolder] = notification.useNotification();
-
+  const { id } = useParams();
   const { data: unitOptions } = useGetUnit();
   const { data: pujaNameOptions } = useGetPujaName();
   const { data: pujaTypeOptions } = useGetPujaType();
   const { data: pujaSubTypeOptions } = useGetPujaSubType();
   const { data: sizeOptions } = useGetProductSizes();
   const { data: colorOptions } = useGetProductColors();
-  const [submitting, setSubmitting] = useState(false);
+  const { mutate: getProductById, data: product } = useGetProductById();
+  console.log("product is is",product)
+  useEffect(() => {
+    getProductById(id);
+  }, [id]);
+  const SetColorValue = ({ name, value }: any) => {
+    const { setFieldValue } = useFormikContext();
+    useEffect(() => {
+      setFieldValue(name, value);
+    }, [name, value, setFieldValue]);
+
+    return null;
+  };
   const openNotification = (description: string) => {
     api.open({
       message: "Warning",
@@ -53,44 +61,37 @@ const CreateProduct = () => {
     });
   };
 
-  const SetColorValue = ({ name, value }: any) => {
-    const { setFieldValue } = useFormikContext();
-    useEffect(() => {
-      setFieldValue(name, value);
-    }, [name, value, setFieldValue]);
-
-    return null;
-  };
-
   return (
     <>
       <Breadcrumb
         style={{ marginBottom: "16px" }}
-        items={[{ title: "Vaidik" }, { title: "Create Product" }]}
+        items={[{ title: "Vaidik" }, { title: "Update Product" }]}
       />
       <Formik<FormValues>
+        enableReinitialize={true}
         initialValues={{
-          brand: "",
-          title: "",
-          imageUrl: "",
+          brand: product?.data?.brand || "",
+          title: product?.data?.title||"",
+          imageUrl: product?.data?.imageUrl || "",
           color: "",
-          unit: null,
-          price: 0,
-          type: null,
-          sub_type: null,
-          description: "",
-          quantity: null,
-          pujaName: [],
-          availableSizes: [],
-          pujaQuantities: {},
-          availableColors: [],
-          quantitySizeAndColors: [],
-          size_based_pricing: false,
-          size_price: [],
-          quantitySizes: [],
-          include_size: false,
-          quantityColors: [],
-          imageUrlColors: [],
+          unit: product?.data?.unit||null,
+          price: product?.data?.price || "",
+          type: product?.data?.type||null,
+          sub_type: product?.data?.sub_type||null,
+          description: product?.data?.description || "",
+          quantity: product?.data?.quantity||null,
+          pujaName:product?.data?.pujaName||  [],
+          availableSizes: product?.data?.availableSizes||[],
+          pujaQuantities:product?.data?.pujaQuantities||{},
+          availableColors: product?.data?.availableColors||[],
+          include_color:product?.data?.include_color || false,
+          quantitySizeAndColors: product?.data?.quantitySizeAndColors||[],
+          size_based_pricing: product?.data?.size_based_pricing || false,
+          size_price: product?.data?.size_price||[],
+          quantitySizes: product?.data?.quantitySizes||[],
+          include_size: product?.data?.include_size || false,
+          quantityColors: product?.data?.quantityColors||[],
+          imageUrlColors: product?.data?.imageUrlColors||[],
         }}
         validationSchema={Yup.object({
           brand: Yup.string(),
@@ -168,14 +169,13 @@ const CreateProduct = () => {
             const pujaName = values?.pujaName.map((item) => item?.value);
             const obj = {
               ...values,
-              // type: values?.type?.value,
-              // sub_type: values?.sub_type?.value,
-              // unit: values?.unit?.value,
-              // pujaName,
+              type: values?.type?.value,
+              sub_type: values?.sub_type?.value,
+              unit: values?.unit?.value,
+              pujaName,
             };
-          
 
-            mutate(obj);
+            // mutate(obj);
             resetForm();
             setSubmitting(false);
           } catch (error) {
@@ -185,6 +185,7 @@ const CreateProduct = () => {
         }}
       >
         {({ touched, errors, values, setFieldValue }) => {
+          console.log("errors", errors);
           const totalQuantity = useMemo(() => {
             if (values.include_size && values.include_color) {
               return values.quantitySizeAndColors.reduce((acc, sizeObj) => {
@@ -710,7 +711,6 @@ const CreateProduct = () => {
                   isMulti
                   options={pujaNameOptions}
                   onChange={(selectedOptions) => {
-                    console.log("selected Options is",selectedOptions)
                     // Preserve existing quantities
                     const newQuantities = { ...values.pujaQuantities };
 
@@ -751,6 +751,7 @@ const CreateProduct = () => {
                   components={animatedComponents}
                   options={unitOptions}
                   onChange={(value) => {
+                    console.log("object")
                     setFieldValue("unit", value);
                   }}
                 />
@@ -875,4 +876,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default EditProduct;
