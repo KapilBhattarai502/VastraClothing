@@ -26,13 +26,11 @@ const CustomerProductDetails = () => {
   };
 
   useEffect(() => {
-    if (data) {
+    if (data?.data && !selectedColor && !selectedSize) {
       setSelectedColor(data?.data?.availableColors[0]);
-      setSelectedSize(data?.data.availableSizes[0]);
-    }
-  }, [data]);
+      setSelectedSize(data?.data?.availableSizes[0]);
 
-  useEffect(() => {
+    }
     if (selectedColor) {
       const currentSelectedUrl = data?.data?.imageUrlColors.filter(
         (colorInfo: any) => colorInfo?.color === selectedColor
@@ -40,8 +38,11 @@ const CustomerProductDetails = () => {
       currentSelectedUrl?.map((colorInfo: any) => {
         setSelectedImageUrl(colorInfo?.imageUrl);
       });
+    } else {
+      setSelectedImageUrl(data?.data?.imageUrl);
     }
-  }, [selectedColor, data]);
+
+  }, [selectedColor, data?.data]);
 
   return (
     <Formik

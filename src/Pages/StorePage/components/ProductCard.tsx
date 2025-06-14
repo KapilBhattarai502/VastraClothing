@@ -44,14 +44,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (product) {
+    if (product && !selectedColor && !selectedSize) {
       setSelectedColor(product?.availableColors[0]);
       setSelectedSize(product?.availableSizes[0]);
 
     }
-  }, [product]);
-
-  useEffect(() => {
     if (selectedColor) {
       const currentSelectedUrl = product?.imageUrlColors.filter(
         (colorInfo: any) => colorInfo?.color === selectedColor
@@ -62,7 +59,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
     } else {
       setSelectedImageUrl(product?.imageUrl);
     }
+
   }, [selectedColor, product]);
+ 
+
   
   const incrementQuantity = () => {
     if (selectedQuantity < product.quantity) {

@@ -13,6 +13,8 @@ const ProductDetails = () => {
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
   const navigate=useNavigate()
 
+  console.log("product is",data?.data)
+
   const handleColorClick = (colorInfo: any) => {
     setSelectedColor(colorInfo?.color);
     console.log("color is ", colorInfo);

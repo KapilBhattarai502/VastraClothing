@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
-import { message } from "antd";
 import { useAddCart } from "../hooks/Post/useAddCart";
 import { CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
 
 interface Product {
   _id: string;
@@ -17,17 +12,17 @@ interface Product {
   quantity: number;
   image: string;
   type: any;
-  sub_type:any;
+  sub_type: any;
   inStock: boolean;
-  availableSizes:[]|any;
-  availableColors:[]|any;
-  include_size:boolean;
-  include_color:boolean;
-  imageUrlColors:[];
-  imageUrl:string;
-  unit:any;
-  size_based_pricing:boolean;
-  size_price:[];
+  availableSizes: [] | any;
+  availableColors: [] | any;
+  include_size: boolean;
+  include_color: boolean;
+  imageUrlColors: [] | any;
+  imageUrl: string;
+  unit: any;
+  size_based_pricing: boolean;
+  size_price: [] | any;
 }
 
 interface ProductCardProps {
@@ -35,72 +30,37 @@ interface ProductCardProps {
 }
 
 const FashionCard = ({ product }: ProductCardProps) => {
-  console.log("product Card ", product);
-  const [selectedColor, setSelectedColor] = useState<any>("");
-  const [selectedSize, setSelectedSize] = useState<any>("");
-  const [selectedImageUrl, setSelectedImageUrl] = useState("");
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const { mutate: addCart } = useAddCart();
+
+  const [selection, setSelection] = useState({
+    color: product.include_color ? product.availableColors?.[0] : "",
+    size: product.include_size ? product.availableSizes?.[0] : "",
+  });
+  const selectedImage = product.include_color
+    ? product.imageUrlColors?.find((c: any) => c.color === selection.color)
+        ?.imageUrl
+    : product.imageUrl;
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (product) {
-      setSelectedColor(product?.availableColors[0]);
-      setSelectedSize(product?.availableSizes[0]);
+  const currentPrice = product.size_based_pricing
+    ? product.size_price?.find((s: any) => s.size === selection.size)?.price
+    : product.price;
 
-    }
-  }, [product]);
-
-  useEffect(() => {
-    if (selectedColor) {
-      const currentSelectedUrl = product?.imageUrlColors.filter(
-        (colorInfo: any) => colorInfo?.color === selectedColor
-      );
-      currentSelectedUrl?.map((colorInfo: any) => {
-        setSelectedImageUrl(colorInfo?.imageUrl);
-      });
-    } else {
-      setSelectedImageUrl(product?.imageUrl);
-    }
-  }, [selectedColor, product]);
-  
-  const incrementQuantity = () => {
-    if (selectedQuantity < product.quantity) {
-      setSelectedQuantity((prev) => prev + 1);
-    }
+  const handleSelect = (type: "color" | "size", value: string) => {
+    setSelection((prev) => ({ ...prev, [type]: value }));
   };
 
-  const decrementQuantity = () => {
-    if (selectedQuantity > 1) {
-      setSelectedQuantity((prev) => prev - 1);
-    }
-  };
-  const handleAddToCart = (productId: string) => {
-    if(product?.include_size && !selectedSize){
-      message.warning("Please select size ")
-      return
-
-    }
-    else if(product?.include_color && !selectedColor){
-      message.warning("Please select a color")
-      return 
-
-    }
-    try {
-      addCart({ quantity: selectedQuantity, productId,size:selectedSize,color:selectedColor });
-      message.success("Added to Cart");
-    } catch (error) {}
-  };
   return (
     <div className="group hover:shadow-lg transition-all duration-300 overflow-hidden bg-white border border-gray-200 hover:border-gray-300 rounded-lg cursor-pointer">
       <div
         className="aspect-square overflow-hidden bg-gray-100"
         onClick={() => navigate(`/admin/productpage/${product._id}`)}
       >
+        {/* className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" */}
         <img
-          src={selectedImageUrl}
+          src={selectedImage || product.imageUrl}
           alt={product.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          // onError={(e) => e.currentTarget.src = fallbackImage}
         />
       </div>
 
@@ -127,40 +87,57 @@ const FashionCard = ({ product }: ProductCardProps) => {
             {product?.sub_type?.label}
           </Badge>
         </div>
+        {product.include_color &&
+          product.availableColors.map((color: any) => (
+            <button
+              onClick={() => handleSelect("color", color)}
+              className={selection.color === color ? "selected" : ""}
+            />
+          ))}
         {product?.include_color && product?.availableColors?.length > 0 && (
           <div className="flex">
             <p className="text-sm text-gray-600 font-bold">Color :</p>
             <div className="flex  items-center">
-            {product?.availableColors?.map((color:any,colorIndex:any)=><button
-                key={colorIndex}
-                onClick={() => setSelectedColor(color)}
-                className={`w-4 h-4 rounded-full border-2 transition-all ml-2 ${
-                  selectedColor === color
-                    ? 'border-primary ring-2 ring-primary/20'
-                    : 'border-border hover:border-primary/50'
-                }`}
-                style={{ backgroundColor: color }}
-                title={color.name}
-              />)}
+              {product?.availableColors?.map((color: any, colorIndex: any) => (
+                <button
+                  key={colorIndex}
+                  onClick={() => handleSelect("color", color)}
+                  className={`w-4 h-4 rounded-full border-2 transition-all ml-2 ${
+                    selection?.color === color
+                      ? "border-primary ring-2 ring-primary/20"
+                      : "border-border hover:border-primary/50"
+                  }`}
+                  style={{ backgroundColor: color }}
+                  title={color.name}
+                />
+              ))}
             </div>
           </div>
         )}
+
         {product?.include_size && product?.availableSizes?.length > 0 && (
-          <div className="flex items-center overflow-scroll over mt-2" style={{
-            height: "40px"
-          }}>
+          <div
+            className="flex items-center overflow-scroll over mt-2"
+            style={{
+              height: "40px",
+            }}
+          >
             <p className="text-sm text-gray-600 font-bold">Size :</p>
-            <div className="flex  items-center" style={{maxWidth:"0.6rem"}}>
-            {product?.availableSizes?.map((size:any,sizeIndex:any)=><button
-                key={sizeIndex}
-                onClick={() => setSelectedSize(size)}
-                className={`border transition-all ml-2 px-2 ${
-                  selectedSize === size
-                    ? 'border-primary ring-2 ring-primary/20'
-                    : 'border-border hover:border-primary/50'
-                }`}
-                title={size}
-              >{size}</button>)}  
+            <div className="flex  items-center" style={{ maxWidth: "0.6rem" }}>
+              {product?.availableSizes?.map((size: any, sizeIndex: any) => (
+                <button
+                  key={sizeIndex}
+                  onClick={() => handleSelect("size", size)}
+                  className={`border transition-all ml-2 px-2 ${
+                    selection?.size === size
+                      ? "border-primary ring-2 ring-primary/20"
+                      : "border-border hover:border-primary/50"
+                  }`}
+                  title={size}
+                >
+                  {size}
+                </button>
+              ))}
             </div>
           </div>
         )}
@@ -168,11 +145,11 @@ const FashionCard = ({ product }: ProductCardProps) => {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold text-gray-900">
-            ₹{product?.size_based_pricing
-              ? product?.size_price?.find(s => s.size === selectedSize)?.price
-               : product?.price?.toLocaleString()}
+              ₹{currentPrice}
             </span>
-            <span className="text-sm text-gray-500">/ {product?.unit?.label}</span>
+            <span className="text-sm text-gray-500">
+              / {product?.unit?.label}
+            </span>
           </div>
           <div className="text-right">
             <div
@@ -183,10 +160,8 @@ const FashionCard = ({ product }: ProductCardProps) => {
               <p>{product?.quantity}</p>
               <p>{product.quantity > 0 ? "In Stock" : "Out of Stock"}</p>
             </div>
-
           </div>
         </div>
-
       </CardContent>
     </div>
   );
