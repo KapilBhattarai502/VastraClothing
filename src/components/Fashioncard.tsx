@@ -18,11 +18,11 @@ interface Product {
   availableColors: [] | any;
   include_size: boolean;
   include_color: boolean;
-  imageUrlColors: [] | any;
+  imageUrlColors: [];
   imageUrl: string;
   unit: any;
   size_based_pricing: boolean;
-  size_price: [] | any;
+  size_price: [];
 }
 
 interface ProductCardProps {
@@ -30,19 +30,18 @@ interface ProductCardProps {
 }
 
 const FashionCard = ({ product }: ProductCardProps) => {
-
+  console.log("product Card ", product);
   const [selection, setSelection] = useState({
     color: product.include_color ? product.availableColors?.[0] : "",
     size: product.include_size ? product.availableSizes?.[0] : "",
   });
   const selectedImage = product.include_color
-    ? product.imageUrlColors?.find((c: any) => c.color === selection.color)
-        ?.imageUrl
+    ? product.imageUrlColors?.find((c) => c.color === selection.color)?.imageUrl
     : product.imageUrl;
   const navigate = useNavigate();
 
   const currentPrice = product.size_based_pricing
-    ? product.size_price?.find((s: any) => s.size === selection.size)?.price
+    ? product.size_price?.find((s) => s.size === selection.size)?.price
     : product.price;
 
   const handleSelect = (type: "color" | "size", value: string) => {
@@ -55,12 +54,10 @@ const FashionCard = ({ product }: ProductCardProps) => {
         className="aspect-square overflow-hidden bg-gray-100"
         onClick={() => navigate(`/admin/productpage/${product._id}`)}
       >
-        {/* className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" */}
         <img
-          src={selectedImage || product.imageUrl}
+          src={selectedImage}
           alt={product.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          // onError={(e) => e.currentTarget.src = fallbackImage}
         />
       </div>
 
@@ -87,33 +84,31 @@ const FashionCard = ({ product }: ProductCardProps) => {
             {product?.sub_type?.label}
           </Badge>
         </div>
-        {product.include_color &&
-          product.availableColors.map((color: any) => (
-            <button
-              onClick={() => handleSelect("color", color)}
-              className={selection.color === color ? "selected" : ""}
-            />
-          ))}
-        {product?.include_color && product?.availableColors?.length > 0 && (
-          <div className="flex">
-            <p className="text-sm text-gray-600 font-bold">Color :</p>
-            <div className="flex  items-center">
-              {product?.availableColors?.map((color: any, colorIndex: any) => (
-                <button
-                  key={colorIndex}
-                  onClick={() => handleSelect("color", color)}
-                  className={`w-4 h-4 rounded-full border-2 transition-all ml-2 ${
-                    selection?.color === color
-                      ? "border-primary ring-2 ring-primary/20"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                  style={{ backgroundColor: color }}
-                  title={color.name}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        {product.include_color && product?.availableColors?.length > 0 &&
+           <div
+           className="flex items-center overflow-scroll over mt-2"
+           style={{
+             height: "40px",
+           }}
+         >
+           <p className="text-sm text-gray-600 font-bold">Color :</p>
+           <div className="flex  items-center" >
+             {product?.availableColors?.map((color: any, colorIndex: any) => (
+               <button
+                 key={colorIndex}
+                 onClick={() => handleSelect("color", color)}
+                 className={`w-4 h-4 rounded-full border-2 transition-all ml-2 ${
+                   selection.color === color
+                     ? "border-primary ring-2 ring-primary/20"
+                     : "border-border hover:border-primary/50"
+                 }`}
+                 title={color.name}
+                 style={{backgroundColor:color}}
+               />
+             
+             ))}
+           </div>
+         </div>}
 
         {product?.include_size && product?.availableSizes?.length > 0 && (
           <div
@@ -129,7 +124,7 @@ const FashionCard = ({ product }: ProductCardProps) => {
                   key={sizeIndex}
                   onClick={() => handleSelect("size", size)}
                   className={`border transition-all ml-2 px-2 ${
-                    selection?.size === size
+                    selection.size === size
                       ? "border-primary ring-2 ring-primary/20"
                       : "border-border hover:border-primary/50"
                   }`}
