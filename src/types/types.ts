@@ -41,6 +41,7 @@ export interface OPTION {
     quantity: number|null|string;
     description: string;
     sizes: Size[];
+    images:string[];
     pujaName:OPTION[];
     puja_quantity:Number;
     unit:String|null;
@@ -49,6 +50,7 @@ export interface OPTION {
     sub_type:String|null;
     availableSizes: [];
     imageUrlColors: [];
+    Variants:[];
     quantitySizeAndColors: []|any;
     quantitySizes:[];
     quantityColors:[];
